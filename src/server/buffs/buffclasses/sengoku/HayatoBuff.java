@@ -43,6 +43,7 @@ public class HayatoBuff extends AbstractBuffClass {
 //                eff.statups.put(MapleBuffStat.CRITICAL_RATE, eff.info.get(MapleStatInfo.x));
                 break;
             case 41101003: // Military Might
+                eff.statups.put(MapleBuffStat.JUMP, eff.info.get(MapleStatInfo.jump));
                 eff.statups.put(MapleBuffStat.JUMP, eff.info.get(MapleStatInfo.u));
                 eff.statups.put(MapleBuffStat.SPEED, eff.info.get(MapleStatInfo.x));
                 eff.statups.put(MapleBuffStat.HAYATO3, eff.info.get(MapleStatInfo.x));
@@ -63,7 +64,8 @@ public class HayatoBuff extends AbstractBuffClass {
                 //TODO - works without
                 break;
             case 41121053: // Princess's Vow
-                //TODO
+                eff.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, eff.info.get(MapleStatInfo.indieMaxDamageOver));
+                eff.statups.put(MapleBuffStat.DAMAGE_PERCENT, eff.info.get(MapleStatInfo.indieDamR));
                 break;
             default:
                 //System.out.println("Hayato skill not coded: " + skill);

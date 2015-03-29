@@ -1293,6 +1293,49 @@ public class PlayerStats implements Serializable {
                 }
                 break;
             }
+            case 4100: // Hayato
+            case 4110:
+            case 4111:
+            case 4112:
+             /*   if (chra.getJob() >= 4111) {
+                        bx = SkillFactory.getSkill(41110006);// Willow Dodge
+                        bof = chra.getTotalSkillLevel(bx);
+                            if (bof > 0) {
+                                eff = bx.getEffect(bof);
+                                dodgeChance += bx.getEffect(bof).getER();
+                                dam_r *= (eff.getX() * eff.getY() + 100.0) / 100.0;
+                                bossdam_r *= (eff.getX() * eff.getY() + 100.0) / 100.0;
+                            }
+                    }
+                * */
+                    if (chra.getJob() >= 4111) {
+                        bx = SkillFactory.getSkill(41120006);// Willow Dodge 2
+                        bof = chra.getTotalSkillLevel(bx);
+                            if (bof > 0) {
+                                eff = bx.getEffect(bof);
+                                dodgeChance += eff.getPercentAvoid();//dodgeChance += eff.getER();
+                            }
+                    }
+                    if (chra.getJob() >= 4110) {
+                        bx = SkillFactory.getSkill(41100006); // Unfaltering Blade
+                        bof = chra.getTotalSkillLevel(bx);
+                            if (bof > 0) {
+                                eff = bx.getEffect(bof);
+                                accuracy += eff.getX();
+                                passive_sharpeye_percent += eff.getCriticalMax();
+                                passive_sharpeye_min_percent +=  eff.getCriticalMin();
+                            }   
+                    }
+                    if (chra.getJob() >= 4100) {
+                        bx = SkillFactory.getSkill(41000003); // Center Ki
+                        bof = chra.getTotalSkillLevel(bx);
+                            if (bof > 0) {
+                                eff = bx.getEffect(bof);
+                                localstr += eff.getStrX();
+                                localdex += eff.getDexX();
+                            }
+                    }
+            break;
         }
         bx = SkillFactory.getSkill(80000000);
         bof = chra.getSkillLevel(bx);

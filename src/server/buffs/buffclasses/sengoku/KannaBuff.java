@@ -74,7 +74,8 @@ public class KannaBuff extends AbstractBuffClass  {
                 //TODO
                 break;
             case 42121053: // Princess's Vow
-                //TODO
+                eff.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, eff.info.get(MapleStatInfo.indieMaxDamageOver));
+                eff.statups.put(MapleBuffStat.DAMAGE_PERCENT, eff.info.get(MapleStatInfo.indieDamR));
                 break;
             case 42101004: // Burning Shikigami Haunting
             case 42111006: // Frozen Shikigami Haunting
