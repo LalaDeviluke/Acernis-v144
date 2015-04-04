@@ -331,8 +331,8 @@ public class Skill implements Comparator<Skill> {
             //    case 33001001:
                 case 1101013:
                 case 36121003:
-                    
-                
+                case 33111006:
+                case 33111007:
                 //END NOVAK ADDED:
                     isBuff = true;
             }

@@ -1233,7 +1233,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             if (db < 0 || db > 10) {
                 db = 0;
             }
-            ps.setInt(++index, ServerConfig.STARTER_MAP); //OLD: db == 2 ? 3000600 : type.map
+            ps.setInt(++index, db == 2 ? 3000600 : type.map);
             ps.setLong(++index, chr.meso); // Meso
             ps.setInt(++index, -1); // Party
             ps.setByte(++index, chr.buddylist.getCapacity()); // Buddylist

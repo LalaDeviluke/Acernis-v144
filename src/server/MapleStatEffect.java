@@ -405,10 +405,23 @@ public class MapleStatEffect implements Serializable {
                 boolean handle = BuffClassFetcher.getHandleMethod(ret, sourceid);
                 if (!handle) {
                     switch (sourceid) {
+                        case 15111023: //seawall
+                            ret.statups.put(MapleBuffStat.STATUS_RESIST, ret.info.get(MapleStatInfo.asrR));
+                            ret.statups.put(MapleBuffStat.ELEMENT_RESIST,ret.info.get(MapleStatInfo.asrR));
+                            break;    
+                        case 15111024: //ironclad
+                            ret.statups.put(MapleBuffStat.DAMAGE_ABSORBED, ret.info.get(MapleStatInfo.y));  
+                            break;
                         case 2001002: // magic guard
                         case 12001001:
                         case 22111001:
                             ret.statups.put(MapleBuffStat.MAGIC_GUARD, ret.info.get(MapleStatInfo.x));
+                            break;
+                        case 24111003://Bad Luck Ward
+                            ret.statups.put(MapleBuffStat.MAXHP, ret.info.get(MapleStatInfo.indieMhpR));
+                            ret.statups.put(MapleBuffStat.MAXMP,ret.info.get(MapleStatInfo.indieMmpR));
+                            ret.statups.put(MapleBuffStat.ABNORMAL_STATUS_R, ret.info.get(MapleStatInfo.x));
+                            ret.statups.put(MapleBuffStat.ELEMENT_RESIST,ret.info.get(MapleStatInfo.y));
                             break;
                         case 2301003: // invincible
                             ret.statups.put(MapleBuffStat.INVINCIBLE, ret.info.get(MapleStatInfo.x));
@@ -453,12 +466,12 @@ public class MapleStatEffect implements Serializable {
                         case 11101002: // All Final attack
                         case 51100002:
                         case 13101002:
-                    //    case 13100022:    
-                  //      case 13100027:
-                  //      case 13110022:
-                  //      case 13110027:
-                  //      case 13120003:
-                //        case 13120010:
+                        case 13100022:    
+                        case 13100027:
+                        case 13110022:
+                        case 13110027:
+                        case 13120003:
+                        case 13120010:
                             ret.statups.put(MapleBuffStat.FINALATTACK, ret.info.get(MapleStatInfo.x));
                             break;
                         case 22161004:
@@ -1393,6 +1406,7 @@ public class MapleStatEffect implements Serializable {
                     ret.info.put(MapleStatInfo.time, Integer.valueOf(60000));
                     ret.statups.put(MapleBuffStat.SUMMON, Integer.valueOf(1));
                     break;
+                case 33111006:
                 case 33111007:
                     ret.statups.put(MapleBuffStat.SPEED, ret.info.get(MapleStatInfo.z));
                     ret.statups.put(MapleBuffStat.ATTACK_BUFF, ret.info.get(MapleStatInfo.y));
@@ -2047,15 +2061,20 @@ public class MapleStatEffect implements Serializable {
 
     public final boolean applyReturnScroll(final MapleCharacter applyto) {
         if (moveTo != -1) {
-            if (applyto.getMap().getReturnMapId() != applyto.getMapId() || sourceid == 2031010 || sourceid == 2030021) {
+            if (applyto.getMap().getReturnMapId() != applyto.getMapId() || sourceid == 2031010 || sourceid == 2030021 || sourceid == 20021110 || sourceid == 2030028 || sourceid == 20031203) {
                 MapleMap target;
                 if (moveTo == 999999999) {
                     target = applyto.getMap().getReturnMap();
+                } else if (sourceid == 2030028 && moveTo == 103020000) {
+                    target = ChannelServer.getInstance(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
+                } else if (sourceid == 20031203 && moveTo == 150000000) {
+                    target = ChannelServer.getInstance(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
                 } else {
                     target = ChannelServer.getInstance(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
                     if (target.getId() / 10000000 != 60 && applyto.getMapId() / 10000000 != 61) {
                         if (target.getId() / 10000000 != 21 && applyto.getMapId() / 10000000 != 20) {
                             if (target.getId() / 10000000 != applyto.getMapId() / 10000000) {
+                                applyto.dropMessage(5, "You can not teleport there as it is on a different continent.");
                                 return false;
                             }
                         }
@@ -2064,9 +2083,11 @@ public class MapleStatEffect implements Serializable {
                 applyto.changeMap(target, target.getPortal(0));
                 return true;
             }
+           // System.out.println(applyto.getMap().getReturnMapId() + " / " + applyto.getMapId());
         }
         return false;
     }
+    
 
     private boolean isSoulStone() {
         return skill && sourceid == 22181003 || sourceid == 24111002;

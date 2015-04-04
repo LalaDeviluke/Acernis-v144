@@ -14,6 +14,8 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     HANDS(0x40, 1),
     SPEED(0x80, 1), //d
     JUMP(0x100, 1), //d
+    STATUS_RESIST(0x10, 2),
+    ELEMENT_RESIST(0x20, 2),
     MAGIC_GUARD(0x200, 1),
     DARKSIGHT(0x400, 1), //d
     BOOSTER(0x800, 1), // d

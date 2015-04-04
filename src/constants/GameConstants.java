@@ -212,82 +212,42 @@ public class GameConstants {
     //Unused npcs will be removed from map once you enter it.
 
     public static void LoadEXP() {
-        exp[2] = 34;
-        exp[3] = 57;
-        exp[4] = 92;
-        exp[5] = 135;
-        int v0 = 15;
-        exp[1] = 15;
-        exp[6] = 372;
-        exp[7] = 560;
-        exp[8] = 840;
-        exp[9] = 1242;
-        long v1 = exp[9];
-        exp[10] = v1;
-        exp[11] = v1;
-        exp[12] = v1;
-        exp[13] = v1;
-        exp[14] = v1;
-        do {
-            exp[v0] = (long) ((double) exp[v0 - 1] * 1.2);
-            ++v0;
-        } while (v0 <= 29);
-        long v2 = exp[29];
-        exp[30] = v2;
-        exp[31] = v2;
-        exp[32] = v2;
-        exp[33] = v2;
-        exp[34] = v2;
-        int v3 = 35;
-        do {
-            exp[v3] = (long) ((double) exp[v3 - 1] * 1.2);
-            ++v3;
-        } while (v3 <= 39);
-        int v4 = 40;
-        do {
-            exp[v4] = (long) ((double) exp[v4 - 1] * 1.08);
-            ++v4;
-        } while (v4 <= 59);
-        long v5 = exp[59];
-        exp[60] = v5;
-        exp[61] = v5;
-        exp[62] = v5;
-        exp[63] = v5;
-        exp[64] = v5;
-        int v6 = 65;
-        do {
-            exp[v6] = (long) ((double) exp[v6 - 1] * 1.08);
-            ++v6;
-        } while (v6 <= 74);
-        int v7 = 75;
-        do {
-            exp[v7] = (long) ((double) exp[v7 - 1] * 1.07);
-            ++v7;
-        } while (v7 <= 99);
-        long v8 = exp[99];
-        exp[100] = v8;
-        exp[101] = v8;
-        exp[102] = v8;
-        exp[103] = v8;
-        exp[104] = v8;
-        int v9 = 105;
-        do {
-            exp[v9] = (long) ((double) exp[v9 - 1] * 1.07);
-            ++v9;
-        } while (v9 <= 159);
-        int v10 = 160;
-        do {
-            exp[v10] = (long) ((double) exp[v10 - 1] * 1.06);
-            ++v10;
-        } while (v10 <= 199);
-        exp[200] = exp[199] * 2;
-        int v11 = 201;
-        do {
-            exp[v11] = (long) ((double) (exp[v11 - 1] * 1.2));
-            ++v11;
-        } while (v11 <= 249);
-        exp[250] = 0;
-    }
+            exp[1] = 15;
+            exp[2] = 34;
+            exp[3] = 57;
+            exp[4] = 92;
+            exp[5] = 135;
+            exp[6] = 372;
+            exp[7] = 560;
+            exp[8] = 840;
+            exp[9] = 1242;
+            for (int i = 10; i < 200; i++)
+            {
+                if (i >= 10 && i < 15 ||
+                    i >= 30 && i < 35 ||
+                    i >= 60 && i < 65 ||
+                    i >= 100 && i < 105)
+                {
+                    exp[i] = exp[i - 1];
+                    continue;
+                }
+                exp[i] = (long)((double)exp[i - 1] * (i < 40 ? 1.2 : i < 75 ? 1.08 : i < 160 ? 1.07 : i < 200 ? 1.06 : 1));
+            } //ExtremeDevilz SUCKS
+            for (int i = 200; i < 250; i++)
+            {
+                if (i % 10 == 0)
+                {
+                    exp[i] = exp[i - 1] * 2;
+                    if (i != 200)
+                    {
+                        exp[i] = (long)((double)exp[i] * (i == 210 ? 1.06 : i == 220 ? 1.04 : i == 230 ? 1.02 : i == 240 ? 1.01 : 1));
+                    }
+                    continue;
+                }
+                exp[i] = (long)((double)exp[i - 1] * (i < 210 ? 1.2 : i < 220 ? 1.06 : i < 230 ? 1.04 : i < 240 ? 1.02 : i < 250 ? 1.01 : 1));
+            }
+            exp[250] = 0;
+        }
 
     public static long getExpNeededForLevel(final int level) {
         if (level < 1 || level >= exp.length) {

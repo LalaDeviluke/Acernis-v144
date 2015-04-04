@@ -21,6 +21,7 @@
 package handling.login;
 
 import constants.GameConstants;
+import constants.ServerConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public class LoginInformationProvider {
     public enum JobType {
 
         UltimateAdventurer(-1, 0, 100000000, true, true, false, false, true, false),
-        Resistance(0, 3000, 931000000, true, true, false, false, true, false),
+        Resistance(0, 3000, 931000000, true, true, false, false, true, false),//tutorial works 100%
         Adventurer(1, 0, 4000000, false, true, false, false, false, false),
         Cygnus(2, 1000, 130030000, false, true, false, false, false, true),
         Aran(3, 2000, 914000000, true, true, false, false, true, false),
@@ -52,7 +53,7 @@ public class LoginInformationProvider {
         AngelicBuster(12, 6001, 940011000, false, true, false, false, false, false),//400000000 - 940011000 - town now TODO tutorial
         Cannoneer(13, 0, 0, true, true, false, false, true, false),
         Xenon(14, 3002, 931050920, true, true, true, false, false, false),
-        Zero(15, 10112, 100000000, false, true, false, false, false, true),//321000000 = zero starter map
+        Zero(15, 10112, 321000000, false, true, false, false, false, true),//create tutorial plox
         Jett(16, 0, 552000050, false, false, false, false, false, true),//End map for tutorial
         Hayato(17, 4001, 807000000, true, true, false, true, false, false),//half stater map TODO real tutorial
         Kanna(18, 4002, 807040000, true, true, false, true, false, false);
@@ -62,7 +63,7 @@ public class LoginInformationProvider {
         private JobType(int type, int id, int map, boolean hairColor, boolean skinColor, boolean faceMark, boolean hat, boolean bottom, boolean cape) {
             this.type = type;
             this.id = id;
-            this.map = map;
+            this.map = id == 3000 ? map : ServerConfig.STARTER_MAP;//for now because only the resistance intro works 100%
             this.hairColor = hairColor;
             this.skinColor = skinColor;
             this.faceMark = faceMark;

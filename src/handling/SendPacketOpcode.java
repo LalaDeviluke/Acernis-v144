@@ -236,8 +236,8 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     CHATTEXT_1((short) 0x168),//147
     CHALKBOARD((short) 0x169),//148
     UPDATE_CHAR_BOX((short) 0x16A),//149
-    SHOW_CONSUME_EFFECT((short) 0x16C),//14a
-    SHOW_SCROLL_EFFECT((short) 0x16D),//14b
+    SHOW_CONSUME_EFFECT((short) 0x16B),//14a 0x16C
+    SHOW_SCROLL_EFFECT((short) 0x16C),//0x16D
     SHOW_MAGNIFYING_EFFECT((short) 0x16E),//14c
     SHOW_POTENTIAL_RESET((short) 0x16F),//14d
     SHOW_FIREWORKS_EFFECT((short) 0x170),//14e

@@ -3532,7 +3532,7 @@ public class CWvsContext {
         packet.writeLong(0);
         packet.writeLong(0);
         packet.writeLong(0);
-        packet.writeLong(0); //v144
+        packet.writeLong(0); //v192 //144
         packet.writeInt(0);
         packet.writeInt(10);
         packet.writeInt(10);
@@ -3555,18 +3555,21 @@ public class CWvsContext {
         return packet.getPacket();
     }
         
-        public static byte[] showMonsterRiding(int cid, Map<MapleBuffStat, Integer> statups, int buffid, int skillId) {
-            MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-            mplew.writeShort(SendPacketOpcode.GIVE_FOREIGN_BUFF.getValue());
-            mplew.writeInt(cid);
-            PacketHelper.writeBuffMask(mplew, statups);
-            mplew.writeZeroBytes(27);
-            mplew.writeInt(buffid);
-            mplew.writeInt(skillId);
-            mplew.writeZeroBytes(9);
-            mplew.write(4);
-            return mplew.getPacket();
-        }
+      
+    public static byte[] showMonsterRiding(int cid, Map<MapleBuffStat, Integer> statups, int buffid, int skillId) {
+         MaplePacketLittleEndianWriter packet = new MaplePacketLittleEndianWriter();
+        packet.writeShort(SendPacketOpcode.GIVE_FOREIGN_BUFF.getValue());
+        packet.writeInt(cid);
+        packet.writeLong(MapleBuffStat.MONSTER_RIDING.getValue());
+        packet.writeLong(0);
+        packet.writeLong(0);
+        packet.writeLong(0);
+        packet.writeZeroBytes(39); //v192 4byte. /144
+        packet.writeInt(buffid); // 1902000 saddle
+        packet.writeInt(skillId); // skillid
+        packet.writeZeroBytes(7);
+        return packet.getPacket();
+    }
 
         public static byte[] givePirate(Map<MapleBuffStat, Integer> statups, int duration, int skillid) {
             return giveForeignPirate(statups, duration, -1, skillid);
