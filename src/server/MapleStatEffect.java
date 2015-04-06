@@ -314,6 +314,7 @@ public class MapleStatEffect implements Serializable {
                 case 35121005:
                 case 35111004:
                 case 35121013:
+                case 35121054: //reactive armor mech
                     ret.info.put(MapleStatInfo.attackCount, 6);
                     ret.info.put(MapleStatInfo.bulletCount, 6);
                     break;
@@ -1157,15 +1158,26 @@ public class MapleStatEffect implements Serializable {
                             break;
                         case 35001001: //flame
                         case 35101009:
-                            ret.info.put(MapleStatInfo.time, 1000);
+                            ret.info.put(MapleStatInfo.time, 2000);
                             ret.statups.put(MapleBuffStat.MECH_CHANGE, level); //ya wtf
                             break;
-                        case 35121013:
-                        case 35111004: //siege
-                            //ret.info.put(MapleStatInfo.time, 5000);
-                            ret.info.put(MapleStatInfo.time, 2100000000);
-                        case 35121005: //missile
-                            ret.info.put(MapleStatInfo.time, 2100000000);
+                        case 35111004: //siege mode
+                         ret.info.put(MapleStatInfo.time, 150000);
+                         ret.statups.put(MapleBuffStat.MECH_CHANGE, level);//new    
+                            break;
+                            
+                        
+                       case 35111016: // overcock mech
+                   ret.statups.put(MapleBuffStat.DAMAGE_PERCENT, ret.info.get(MapleStatInfo.indieDamR));
+                   ret.statups.put(MapleBuffStat.IGNORE_MONSTER_DEF, ret.info.get(MapleStatInfo.x));
+                    break;         
+                            
+                         case 35121013:
+                        ret.info.put(MapleStatInfo.time, 2100000000);
+                        ret.statups.put(MapleBuffStat.MECH_CHANGE, level);//new
+                        
+                        case 35121005: //missile tank
+                            ret.info.put(MapleStatInfo.time, 1500000000);
                             ret.statups.put(MapleBuffStat.MECH_CHANGE, level); //ya wtf
                             break;
                         case 10001075: // Cygnus Echo
@@ -1296,7 +1308,7 @@ public class MapleStatEffect implements Serializable {
                 break;
             case 5721053:
             case 5321053:
-            case 5221053:
+            
             case 5121053:
             case 4341053:
             case 4221053:
@@ -1316,10 +1328,17 @@ public class MapleStatEffect implements Serializable {
             case 31121053:
             case 32121053:
             case 33121053:
-            case 35121053: //For Liberty
                 ret.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, ret.info.get(MapleStatInfo.indieMaxDamageOver));
                 ret.statups.put(MapleBuffStat.DAMAGE_PERCENT, ret.info.get(MapleStatInfo.indieDamR));
-            break;
+                    break;
+                case 5221053://epic Aventure corsair
+                    ret.statups.put(MapleBuffStat.DAMAGE_PERCENT, ret.info.get(MapleStatInfo.indieDamR));
+                    ret.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, ret.info.get(MapleStatInfo.indieMaxDamageOver));
+                    break; 
+                case 35121053://for liberty mechanic
+                    ret.statups.put(MapleBuffStat.DAMAGE_PERCENT, ret.info.get(MapleStatInfo.indieDamR));
+                    ret.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, ret.info.get(MapleStatInfo.indieMaxDamageOver));
+                    break;     
                 case 61101004:
                     ret.statups.put(MapleBuffStat.BOOSTER, Integer.valueOf(-((Integer) ret.info.get(MapleStatInfo.x)).intValue()));
                     break;
@@ -1335,6 +1354,9 @@ public class MapleStatEffect implements Serializable {
                 case 4341054:
                     ret.statups.put(MapleBuffStat.ARIANT_COSS_IMU2, Integer.valueOf(1));
                     ret.overTime = true;
+                    break;
+                 case 4341052:
+                    ret.statups.put(MapleBuffStat.ASURA, ret.info.get(MapleStatInfo.x));
                     break;
                 case 35120014:
                     ret.statups.put(MapleBuffStat.DICE_ROLL, Integer.valueOf(0));
@@ -2083,11 +2105,34 @@ public class MapleStatEffect implements Serializable {
                 applyto.changeMap(target, target.getPortal(0));
                 return true;
             }
-           // System.out.println(applyto.getMap().getReturnMapId() + " / " + applyto.getMapId());
+            System.out.println(applyto.getMap().getReturnMapId() + " / " + applyto.getMapId());
         }
         return false;
     }
     
+   /* public final boolean applyReturnScroll(final MapleCharacter applyto) {
+        if (moveTo != -1) {
+            if (applyto.getMap().getReturnMapId() != applyto.getMapId() || sourceid == 2031010 || sourceid == 2030021 || sourceid == 20021110 || sourceid == 2030028 || sourceid == 20031203) {
+                MapleMap target;
+                if (moveTo == 999999999) {
+                    target = applyto.getMap().getReturnMap();
+                } else {
+                    target = ChannelServer.getInstance(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
+                    if (target.getId() / 10000000 != 60 && applyto.getMapId() / 10000000 != 61) {
+                        if (target.getId() / 10000000 != 21 && applyto.getMapId() / 10000000 != 20) {
+                            if (target.getId() / 10000000 != applyto.getMapId() / 10000000) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                applyto.changeMap(target, target.getPortal(0));
+                return true;
+            }
+        }
+        return false;
+    }
+*/    
 
     private boolean isSoulStone() {
         return skill && sourceid == 22181003 || sourceid == 24111002;
@@ -2636,7 +2681,7 @@ public class MapleStatEffect implements Serializable {
             //applyto.getMap().broadcastMessage(applyto, CField.giveForeignBuff(applyto.getId(), stat, this), false);
             //break;
             //}
-            case 32121003: { //twister
+           case 32121003: { //twister
                 if (applyto.isHidden()) {
                     break;
                 }
@@ -2776,13 +2821,15 @@ public class MapleStatEffect implements Serializable {
                 normal = false;
                 break;
             }
-             case 35111004: {//siege
+             case 35111004: {//siege mode mech
                 if (applyto.getBuffedValue(MapleBuffStat.MECH_CHANGE) != null && applyto.getBuffSource(MapleBuffStat.MECH_CHANGE) == 35121005) {
                     //SkillFactory.getSkill(35121013).getEffect(level).applyBuffEffect(applyfrom, applyto, primary, newDuration);
-                    normal = false;
+                   SkillFactory.getSkill(35121013).getEffect(applyto.getSkillLevel(35121013)).applyBuffEffect(applyfrom, applyto, primary, newDuration);
+                   normal = false;
                     SkillFactory.getSkill(35121013).getEffect(level).applyTo(applyto);
-                    //return;
+                    return;
                 }
+                
                 if (applyto.isHidden()) {
                     break;
                 }
@@ -2807,6 +2854,8 @@ public class MapleStatEffect implements Serializable {
                 applyto.getMap().broadcastMessage(applyto, BuffPacket.giveForeignBuff(applyto.getId(), stat, this), false);
                 break;
             }
+            
+            
             case 1220013: {
                 if (applyto.isHidden()) {
                     break;
@@ -2871,6 +2920,19 @@ public class MapleStatEffect implements Serializable {
                 normal = false;
                 break;
             }
+            
+             // Asura By Mixtamal6 
+            case 4341052: 
+               localstatups = new EnumMap(MapleBuffStat.class);
+               localstatups.put(MapleBuffStat.ASURA, 1);
+               applyto.getClient().getSession().write(CWvsContext.BuffPacket.giveBuff(this.sourceid, localDuration, localstatups, this));
+               applyto.getClient().getSession().write(CWvsContext.BuffPacket.giveBuff(4341052, 60000, statups, SkillFactory.getSkill(4341052).getEffect(1)));
+               applyto.getClient().getSession().write(CWvsContext.BuffPacket.giveForeignBuff(this.sourceid, statups, SkillFactory.getSkill(4341052).getEffect(1)));
+               normal = false;
+               break;
+            
+            
+            
             case 3211005: {// golden eagle
                 if (applyfrom.getTotalSkillLevel(3220005) > 0) {
                     SkillFactory.getSkill(3220005).getEffect(applyfrom.getTotalSkillLevel(3220005)).applyBuffEffect(applyfrom, applyto, primary, newDuration);
@@ -2950,14 +3012,15 @@ public class MapleStatEffect implements Serializable {
                 break;
             }
             case 35001002:
-                
-              
-        if (applyfrom.getTotalSkillLevel(35120000) > 0) {
+              if (applyfrom.getTotalSkillLevel(35120000) > 0) {
                     SkillFactory.getSkill(35120000).getEffect(applyfrom.getTotalSkillLevel(35120000)).applyBuffEffect(applyfrom, applyto, primary, newDuration);
                     return;
                 }
             break;
             
+               
+                
+                
             
             // START Novak added
 
@@ -3038,7 +3101,17 @@ public class MapleStatEffect implements Serializable {
             int mountid = parseMountInfo(applyto, this.sourceid);
             int mountid2 = parseMountInfo_Pure(applyto, this.sourceid);
             if ((mountid != 0) && (mountid2 != 0)) {
-            
+            //hacky mech
+                /*
+             if (sourceid == 35001002 && applyto.getBuffedValue(MapleBuffStat.ENHANCED_WDEF) == null) { //hacky
+                            int bufftoGive = 2259120 + applyto.getTotalSkillLevel(35001002);
+                            MapleItemInformationProvider.getInstance().getItemEffect(bufftoGive).applyTo(applyto);
+                        } else if (sourceid == 35120000) {
+                            int bufftoGive = 2259130 + applyto.getTotalSkillLevel(35120000);
+                            MapleItemInformationProvider.getInstance().getItemEffect(bufftoGive).applyTo(applyto);
+                        }   
+                */
+                //
                 final EnumMap<MapleBuffStat, Integer> stat = new EnumMap<>(MapleBuffStat.class);
           //      stat = new EnumMap(MapleBuffStat.class);
                 stat.put(MapleBuffStat.MONSTER_RIDING, Integer.valueOf(0));
@@ -3605,7 +3678,8 @@ public class MapleStatEffect implements Serializable {
                 || sourceid == 80001044
                 || (sourceid >= 80001082 && sourceid <= 80001090)
                 || sourceid == 30011159
-                || sourceid == 30011109 || sourceid == 33001001 /*|| sourceid == 35001002*/);
+               // || sourceid == 30011109 || sourceid == 33001001 /*|| sourceid == 35001002*/);
+                || sourceid == 30011109 || sourceid == 33001001 || sourceid == 35001002);
     }
 
     public final boolean isMonsterRiding() {
@@ -3842,8 +3916,9 @@ private boolean isSpiritClaw() {
             case 14001005: // darkness
             case 15001004: // lightning
             case 35111001:
-            case 35111010:
-            case 35111009: // Kishin Shoukan
+            case 35111010://satelite 2
+            case 35111009: // satellite 1
+            
             case 42101021: // Foxfire
             case 42121021: // Foxfire
                 return SummonMovementType.FOLLOW;
@@ -4084,11 +4159,13 @@ private boolean isSpiritClaw() {
     public final boolean isMechChange() {
         switch (sourceid) {
             
+            case 35121054:
             case 35111004: //siege
             case 35001001: //flame
             case 35101009:
             case 35121013:
             case 35121005:
+            case 35100008:
                 return skill;
         }
         return false;

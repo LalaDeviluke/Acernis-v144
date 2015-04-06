@@ -1209,7 +1209,11 @@ public class DamageParse {
         ret.lastAttackTickCount = lea.readInt();
         if (GameConstants.isEnergyBuff(ret.skill)) {
             lea.skip(4);
-        } else {
+        } 
+        else if (ret.skill == 4341052){//Asura - Mixtamal6
+            lea.skip(3); //new
+        } 
+        else {
             lea.skip(8);
         }
 

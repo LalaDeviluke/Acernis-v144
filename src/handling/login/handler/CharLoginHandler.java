@@ -1,5 +1,6 @@
 package handling.login.handler;
 
+import client.LoginCrypto;
 import client.MapleCharacter;
 import client.MapleCharacterUtil;
 import client.MapleClient;
@@ -148,10 +149,14 @@ public class CharLoginHandler {
     }
 
     public static void redirectorLogin(final LittleEndianAccessor slea, final MapleClient c) {
-        String login = slea.readMapleAsciiString();
-
-        c.setUsername(login);
-        c.getSession().write(LoginPacket.getAuthSuccessRequest(c));
+        String username = slea.readMapleAsciiString();
+        String password = slea.readMapleAsciiString(); //this LOL
+        int status = c.login(username, password, false);
+        if(status == 0)
+        {
+            c.loginAttempt = 0;
+            LoginWorker.registerClient(c);
+        }    
     }
 
     public static void ServerListRequest(final MapleClient c) {

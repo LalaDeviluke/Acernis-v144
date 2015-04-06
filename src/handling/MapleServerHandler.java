@@ -504,12 +504,11 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
         }
         switch (header) {
             case LOGIN_REDIRECTOR:
+                System.out.println("Redirector login received");
                 if (!ServerConstants.Redirector) {
                     System.out.println("Redirector login packet recieved, but server is not set to redirector. Please change it in ServerConstants!");
                 } else {
-                    String username = slea.readMapleAsciiString(); // lol
-                    c.loginData(username);
-                    c.getSession().write(LoginPacket.getAuthSuccessRequest(c));
+                    CharLoginHandler.redirectorLogin(slea, c);
                 }
                 break;
             case CLIENT_HELLO:

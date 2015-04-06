@@ -2219,7 +2219,9 @@ public class MapScriptMethods {
             }
 
             case dublTuto23: {
+                c.getSession().write(CWvsContext.getTopMsg("Defeat Mano to complete the Quest!"));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300523), new Point(-283, 152));
+            break;
             }
 
             case np_tuto_0_0_before: {

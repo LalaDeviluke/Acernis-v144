@@ -63,7 +63,7 @@ public class LoginInformationProvider {
         private JobType(int type, int id, int map, boolean hairColor, boolean skinColor, boolean faceMark, boolean hat, boolean bottom, boolean cape) {
             this.type = type;
             this.id = id;
-            this.map = id == 3000 ? map : ServerConfig.STARTER_MAP;//for now because only the resistance intro works 100%
+            this.map = id == 3000 ? map : /*id == 10112 ? map : */ServerConfig.STARTER_MAP;//for now because only the resistance intro works 100%
             this.hairColor = hairColor;
             this.skinColor = skinColor;
             this.faceMark = faceMark;
