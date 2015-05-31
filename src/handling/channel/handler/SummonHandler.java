@@ -62,12 +62,14 @@ import tools.packet.CField.SummonPacket;
 
 public class SummonHandler {
 
-    public static final void MoveDragon(final LittleEndianAccessor slea, final MapleCharacter chr) {
-        slea.skip(8); //POS
+public static final void MoveDragon(final LittleEndianAccessor slea, final MapleCharacter chr) {//MIXTAMAL6 +Mally
+        slea.skip(12);//New in v14X+
         final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 5);
         if (chr != null && chr.getDragon() != null && res.size() > 0) {
             final Point pos = chr.getDragon().getPosition();
             MovementParse.updatePosition(res, chr.getDragon(), 0);
+           
+
             if (!chr.isHidden()) {
                 chr.getMap().broadcastMessage(chr, CField.moveDragon(chr.getDragon(), pos, res), chr.getTruePosition());
             }
@@ -115,7 +117,7 @@ public class SummonHandler {
         if (sum.getOwnerId() != chr.getId() || sum.getSkillLevel() <= 0 || sum.getMovementType() == SummonMovementType.STATIONARY) {
             return;
         }
-        slea.skip(16); //startPOS
+        slea.skip(12); //startPOS
         final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 4);
 
         final Point pos = sum.getPosition();
@@ -311,6 +313,8 @@ public class SummonHandler {
                 chr.getMap().broadcastMessage(chr, EffectPacket.showBuffeffect(chr.getId(), sum.getSkill(), 2, chr.getLevel(), sum.getSkillLevel()), false);
                 break;
             case 1321007: //beholder
+            case 1301013: // Evil Eye
+            case 1311013: // Evil Eye of Domination
                 Skill bHealing = SkillFactory.getSkill(slea.readInt());
                 final int bHealingLvl = chr.getTotalSkillLevel(bHealing);
                 if (bHealingLvl <= 0 || bHealing == null) {

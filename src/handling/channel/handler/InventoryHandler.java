@@ -45,6 +45,8 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MapleMount;
 import client.inventory.MaplePet;
 import client.inventory.MaplePet.PetFlag;
+import com.google.common.primitives.Ints;
+import static com.google.common.primitives.Ints.toArray;
 import constants.GameConstants;
 import database.DatabaseConnection;
 import handling.channel.ChannelServer;
@@ -260,6 +262,80 @@ public class InventoryHandler {
                 final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 final Pair<Integer, List<StructRewardItem>> rewards = ii.getRewardItem(itemId);
 
+                switch (itemId) {
+                                    case 2290245:
+                case 2290285:
+                case 2290448:
+                case 2290449:
+                case 2290450:
+                case 2290451:
+                case 2290452:
+                case 2290454:
+                case 2290455:
+                case 2290456:
+                case 2290457:
+                case 2290458:
+                case 2290459:
+                case 2290460:
+                case 2290461:
+                case 2290462:
+                case 2290463:
+                case 2290464:
+                case 2290465:
+                case 2290466:
+                case 2290467:
+                case 2290468:
+                case 2290469:
+                case 2290571:
+                case 2290581:
+                case 2290602:
+                case 2290653:
+                case 2290714:
+                case 2290715:
+                case 2290721:
+                case 2290722:
+                case 2290723:
+                case 2290724:
+                case 2290803:
+                case 2290868:
+                case 2290869:
+                case 2290870:
+                case 2290871:
+                case 2290872:
+                case 2290873:
+                case 2290874:
+                case 2290875:
+                case 2290876:
+                case 2290877:
+                case 2290878:
+                case 2290879:
+                case 2290880:
+                case 2290881:
+                case 2290882:
+                case 2290883:
+                case 2290884:
+                case 2290885:
+                case 2290886:
+                case 2290887:
+                case 2290888:
+                case 2290889:
+                case 2290890:
+                case 2290891:
+                case 2290892:
+                case 2290893:
+                case 2290914:
+                case 2290915:
+                case 2291020:
+            //    case 2291021:
+              //  case 2430144: //smb
+                    final int itemid = Randomizer.nextInt(999) + 2290000;
+                    World.Broadcast.broadcastMessage(CField.getGameMessage("SMB.", (short) 8));
+                    if (MapleItemInformationProvider.getInstance().itemExists(itemid) && !MapleItemInformationProvider.getInstance().getName(itemid).contains("Special") && !MapleItemInformationProvider.getInstance().getName(itemid).contains("Event")) {
+                        MapleInventoryManipulator.addById(c, itemid, (short) 1, "Reward item: " + toUse.getItemId() + " on " + FileoutputUtil.CurrentReadable_Date());
+                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
+                    }
+                    break;
+                }
                 if (rewards != null && rewards.getLeft() > 0) {
                     while (true) {
                         for (StructRewardItem reward : rewards.getRight()) {
@@ -319,6 +395,9 @@ public class InventoryHandler {
                         return true;
                     }
                     switch (itemId) {
+                         case 2291021:
+                             chr.dropMessage(6, "Unknown error.");
+                             break;
                         default:
                             chr.dropMessage(6, "Unknown error.");
                             break;
@@ -372,6 +451,12 @@ public class InventoryHandler {
             c.getSession().write(CWvsContext.enableActions());
             return;
         }
+         switch(toUse.getItemId()) {
+        case 2290285:
+            System.out.println("Return 1");
+         }
+        
+
         if (!FieldLimitType.PotionUse.check(chr.getMap().getFieldLimit())) { //cwk quick hack
             if (MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId()).applyTo(chr)) {
                 MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
@@ -614,7 +699,7 @@ public class InventoryHandler {
                     boolean rewarded = false;
                     while (!rewarded) {
                         StructItemOption pot = pots.get(Randomizer.nextInt(pots.size())).get(reqLevel);
-                        if (pot != null && pot.reqLevel / 10 <= reqLevel && GameConstants.optionTypeFits(pot.optionType, eqq.getItemId()) && GameConstants.potentialIDFits(pot.opID, new_state, i)) { //optionType
+                        if (pot != null && pot.reqLevel / 1 <= reqLevel && GameConstants.optionTypeFits(pot.optionType, eqq.getItemId()) && GameConstants.potentialIDFits(pot.opID, new_state, i)) { //optionType
                             //have to research optionType before making this truely official-like
                             if (isAllowedPotentialStat(eqq, pot.opID)) {
                                 if (i == 0) {
@@ -623,6 +708,8 @@ public class InventoryHandler {
                                     eqq.setPotential2(pot.opID);
                                 } else if (i == 2) {
                                     eqq.setPotential3(pot.opID);
+                                } else if (i == 3) {
+                                    eqq.setPotential4(pot.opID);
                                 }
                                 rewarded = true;
                             }
@@ -706,6 +793,8 @@ public class InventoryHandler {
                                     eqq.setPotential2(pot.opID);
                                 } else if (i == 2) {
                                     eqq.setPotential3(pot.opID);
+                                }  else if (i == 3) {
+                                    eqq.setPotential4(pot.opID);
                                 }
                                 rewarded = true;
                             }
@@ -1034,6 +1123,7 @@ public class InventoryHandler {
                 break;
             }
         }
+
         c.getPlayer().getMap().broadcastMessage(CWvsContext.useSkillBook(chr, skill, maxlevel, canuse, success));
         c.getSession().write(CWvsContext.enableActions());
         return canuse;
@@ -1311,9 +1401,12 @@ public class InventoryHandler {
         int mountid = 0;
         //int npc = MapleItemInformationProvider.getInstance().getEquipStats(itemId).get("npc").intValue();
         //String script = MapleItemInformationProvider.getInstance().getEquipStats(itemId).get("script").toString();
+        final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         int npc = 9010000; // for now
         String script = "consume_" + itemId; // for now
 
+       
+        
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && !chr.hasBlockedInventory() && !chr.inPVP()) {
             switch (toUse.getItemId()) {
                 case 2430007: { // Blank Compass
@@ -1335,6 +1428,39 @@ public class InventoryHandler {
                     NPCScriptManager.getInstance().start(c, 2084001, null);
                     break;
                 }
+                
+case 2431935: { 
+                    Integer[] itemArray = {2290000,
+                        2290002, 2290004, 2290006, 2290008, 2290010, 2290012, 2290014, 2290016, 2290018, 2290019, 2290020, 2290022, 2290024, 2290026, 2290028, 
+                        2290030, 2290032,2290034,2290036, 2290038, 2290040, 2290042, 2290044, 2290046, 2290048, 2290050, 2290052, 2290054, 2290056, 2290058, 2290060, 
+                        2290062, 2290064, 2290066, 2290068, 2290070, 2290072, 2290074, 2290076, 2290078, 2290080, 2290082, 2290084, 2290086, 2290088, 
+                        2290090, 2290092, 2290094, 2290096, 2290097, 2290099, 2290101, 2290102, 2290104, 2290106, 2291022, 2291013, 2291011, 2291010, 2291008, 2291007, 
+                        2291005, 2291003, 2291002, 2291000, 2290998, 2290995, 2290996, 2290993, 2290979, 2290977, 2290975, 2290973, 2290971, 2290969, 2290967, 
+                        2290966, 2290964, 2290962, 2290960, 2290959, 2290957, 2290955, 2290953, 2290951, 2290949, 2290947, 2290945, 2290943, 2290941, 
+                        2290939, 2290928, 2290798, 2290808, 2290809, 2290810, 2290811, 2290812, 2290813, 2290814, 2290815, 2290816, 2290817, 2290818, 
+                        2290819, 2290820, 2290821, 2290822, 2290823, 2290824, 2290825, 2290826, 2290827, 2290828, 2290829, 2290830, 2290831, 2290832, 
+                        2290833, 2290834, 2290835, 2290836, 2290837, 2290838, 2290839, 2290840, 2290841, 2290842, 2290843, 2290844, 2290845, 2290846, 
+                        2290847, 2290848, 2290849, 2290850, 2290851, 2290852, 2290853, 2290854, 2290855, 2290856, 2290857, 2290858, 2290859, 2290860, 
+                        2290861, 2290862, 2290863, 2290864, 2290865, 2290866, 2290867, 2290794, 2290795, 2290796, 2290791, 2290792, 2290789, 2290787, 
+                        2290777, 2290775, 2290773, 2290771, 2290769, 2290767, 2290765, 2290751, 2290752, 2290753, 2290763, 2290749, 2290747, 2290745, 
+                        2290743, 2290741, 2290739, 2290734, 2290732, 2290729, 2290730, 2290727, 2290725, 2290706, 2290707, 2290704, 2290689, 2290689, 
+                        2290651, 2290649, 2290647, 2290645, 2290639, 2290641, 2290637, 2290635, 2290633, 2290631, 2290629, 2290627, 2290624, 2290625, 
+                        2290622, 2290619, 2290620, 2290617, 2290615, 2290612, 2290613, 2290610, 2290608, 2290599, 2290597, 2290595, 2290593, 2290591, 
+                        2290580, 2290589, 2290523, 2290521, 2290519, 2290516, 2290517, 2290514, 2290512, 2290446, 2290445, 2290443, 2290441, 2290438, 2290439, 
+                        2290436, 2290434, 2290432, 2290430, 2290426, 2290427, 2290428, 2290424, 2290422, 2290420, 2290418, 2290416, 2290414, 2290412, 
+                        2290378, 2290370, 2290366, 2290363, 2290364, 
+                        2290361, 2290358, 2290359, 2290356, 2290349, 2290354, 2290333, 2290331, 2290328, 2290329, 2290326, 2290324, 2290322, 2290292, 2290290, 
+                        2290284, 2290281, 2290282, 2290279, 2290277, 2290275, 2290246, 2290244, 2290242, 2290240, 2290238, 2290236, 2290234, 2290232, 
+                        2290230, 2290228, 2290226, 2290206, 2290204, 2290205, 2290153, 2290154, 2290155, 2290156, 2290151, 2290150, 2290148, 2290146, 2290144, 2290142, 2290140, 2290138, 2290136, 2290134, 2290132, 2290130, 2290128, 2290126, 2290123, 2290124, 2290121, 2290119, 2290117, 2290115, 2290114, 2290112, 2290110};         
+                    int randomizer = Randomizer.nextInt(itemArray.length);
+                    int reward = itemArray[randomizer];
+                        if (MapleItemInformationProvider.getInstance().itemExists(reward)) {
+                            MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(itemId), itemId, 1, false, false);
+                            MapleInventoryManipulator.addById(c, reward, (short) 1, "Reward item: " + toUse.getItemId() + " on " + FileoutputUtil.CurrentReadable_Date());
+                        }
+                break;
+                }
+                
                 case 2430121: {
                     c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300166), c.getPlayer().getPosition());
                     MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
@@ -1416,7 +1542,7 @@ public class InventoryHandler {
                     if (c.getPlayer().getInventory(MapleInventoryType.SETUP).getNumFreeSlot() >= 1) {
                         if (c.getPlayer().getInventory(MapleInventoryType.USE).countById(2430692) >= 1) {
                             final int rank = Randomizer.nextInt(100) < 30 ? (Randomizer.nextInt(100) < 4 ? 2 : 1) : 0;
-                            final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+ //                           final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                             final List<StructItemOption> pots = new LinkedList<>(ii.getAllSocketInfo(rank).values());
                             int newId = 0;
                             while (newId == 0) {
@@ -1512,7 +1638,7 @@ public class InventoryHandler {
                     }
                     break;
                 case 2430144: //smb
-                    final int itemid = Randomizer.nextInt(373) + 2290000;
+                    final int itemid = Randomizer.nextInt(999) + 2290000;
                     if (MapleItemInformationProvider.getInstance().itemExists(itemid) && !MapleItemInformationProvider.getInstance().getName(itemid).contains("Special") && !MapleItemInformationProvider.getInstance().getName(itemid).contains("Event")) {
                         MapleInventoryManipulator.addById(c, itemid, (short) 1, "Reward item: " + toUse.getItemId() + " on " + FileoutputUtil.CurrentReadable_Date());
                         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
@@ -2389,15 +2515,18 @@ public class InventoryHandler {
     }
 
     public static final void useInnerCirculator(LittleEndianAccessor slea, MapleClient c) {
+        System.out.println("Circ used");
         int itemid = slea.readInt();
+        System.out.println("ItemID Int");
         short slot = (short) slea.readInt();
+        System.out.println("slot Int");
         Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
         if (item.getItemId() == itemid) {
             List<InnerSkillValueHolder> newValues = new LinkedList<>();
             int i = 0;
             for (InnerSkillValueHolder isvh : c.getPlayer().getInnerSkills()) {
                 if (!isvh.isLocked()) {
-                    if (i == 0 && c.getPlayer().getInnerSkills().size() > 1 && itemid == 2701000) { //Ultimate Circulator
+                    if (i == 0 && c.getPlayer().getInnerSkills().size() > 1 && itemid == 2702000) { //Ultimate Circulator
                         newValues.add(InnerAbillity.getInstance().renewSkill(isvh.getRank(), itemid, true, false));
                     } else {
                         newValues.add(InnerAbillity.getInstance().renewSkill(isvh.getRank(), itemid, false, false));
@@ -4846,7 +4975,7 @@ public class InventoryHandler {
         c.getSession().write(CWvsContext.enableActions());
     }
 
-    public static final boolean UseTeleRock(LittleEndianAccessor slea, MapleClient c, int itemId) {
+  /* public static final boolean UseTeleRock(LittleEndianAccessor slea, MapleClient c, int itemId) {
         boolean used = false;
         if (itemId == 5041001 || itemId == 5040004) {
             slea.readByte(); //useless
@@ -4860,6 +4989,7 @@ public class InventoryHandler {
                 }
             }
         } else {
+            c.getPlayer().dropMessage(1, "You cannot go to that place.");
             final MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(slea.readMapleAsciiString());
             if (victim != null && !victim.isIntern() && c.getPlayer().getEventInstance() == null && victim.getEventInstance() == null) {
                 if (!FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit()) && !FieldLimitType.VipRock.check(c.getChannelServer().getMapFactory().getMap(victim.getMapId()).getFieldLimit()) && !victim.isInBlockedMap() && !c.getPlayer().isInBlockedMap()) {
@@ -4872,6 +5002,7 @@ public class InventoryHandler {
         }
         return used && itemId != 5041001 && itemId != 5040004;
     }
+      */
 
     public static boolean checkPotentialLock(MapleCharacter chr, Equip eq, int line, int potential) {
         if (line == 0 || potential == 0) {
@@ -4889,4 +5020,56 @@ public class InventoryHandler {
         }
         return true;
     }
+    
+ 
+public static final boolean UseTeleRock(LittleEndianAccessor slea, MapleClient c, int itemId) {
+        boolean used = false;
+        if (itemId == 5040004) {
+            slea.readByte();
+        } 
+        if ((itemId == 5040004) || itemId == 5041001)
+        {
+            if(slea.readByte() == 0)
+            {
+                final MapleMap target = c.getChannelServer().getMapFactory().getMap(slea.readInt());
+                if (target != null){ //Premium and Hyper rocks are allowed to go anywhere. Blocked maps are checked below. 
+                    if (!FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit()) && !FieldLimitType.VipRock.check(target.getFieldLimit()) && !c.getPlayer().isInBlockedMap()) { //Makes sure this map doesn't have a forced return map
+                        c.getPlayer().changeMap(target, target.getPortal(0));
+                        if(itemId == 5041001) used = true;
+                    } else {
+                        c.getPlayer().dropMessage(1, "You cannot go to that place.");
+                    }
+                } else {
+                    c.getPlayer().dropMessage(1, "The place you want to go to does not exist."); 
+                }  
+            } else {
+                final String name = slea.readMapleAsciiString();
+                final MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
+                if (victim != null && !victim.isIntern() && c.getPlayer().getEventInstance() == null && victim.getEventInstance() == null) {
+                    if (!FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit()) && !FieldLimitType.VipRock.check(c.getChannelServer().getMapFactory().getMap(victim.getMapId()).getFieldLimit()) && !victim.isInBlockedMap() && !c.getPlayer().isInBlockedMap()) {
+                        c.getPlayer().changeMap(victim.getMap(), victim.getMap().findClosestPortal(victim.getTruePosition()));
+                        if(itemId == 5041001) used = true;
+                    } else {
+                        c.getPlayer().dropMessage(1, "You cannot go to where that person is.");
+                    }
+                } else {
+                    if(victim == null) {
+                        c.getPlayer().dropMessage(1, "(" +name + ") is either offline or in a different channel.");
+                    }
+                    else {
+                        c.getPlayer().dropMessage(1, "(" +name + ") is currently difficult to locate, so the teleport will not take place.");
+                    }
+                }
+            }
+        } else {
+            if (itemId == 5040004) {
+                c.getPlayer().dropMessage(1, "You are not able to use this teleport rock.");
+            }
+            else{
+                c.getPlayer().dropMessage(1, "This teleport rock is currently disabled.");
+            }
+        }
+        return used;
+    }
+    
 }

@@ -7,6 +7,7 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import handling.channel.ChannelServer;
+import handling.world.World;
 import java.awt.Point;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -456,7 +457,7 @@ public class PlayerHandler {
         slea.skip(2);
         boolean isDeadlyAttack = false;
         boolean pPhysical = false;
-        int oid;
+        int oid = 0;
         int monsteridfrom = 0;
         int fake = 0;
         int mpattack = 0;
@@ -467,26 +468,13 @@ public class PlayerHandler {
         byte pType = 0;
         Point pPos = new Point(0, 0);
         MapleMonster attacker = null;
-            /*   if (GameConstants.isXenon(chr.getJob())) {
+        
+               if (GameConstants.isXenon(chr.getJob())) {
                 if (chr.getSkillLevel(36110004) > 0) {
                     chr.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(chr.getId(), oid));
-                    AttackInfo attack = DamageParse.parseDmgM(slea. chr);
-              //      chr.getMap().broadcastMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skill,  chr.getSkillLevel(36110004), attack.display, attack.speed, attack.allDamage, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), chr.getTruePosition());
                 }
-                MapleStatEffect eff = chr.getBuffedSkillEffect(MapleBuffStat.DARK_CRESSENDO, 36111003);
-                if (eff != null && damage == -1) {
-                    if (eff.makeChanceResult()) {
-                        chr.dualBrid++;
-                        if (chr.dualBrid >= 10) {
-                            chr.cancelEffectFromBuffStat(BuffStats.DARK_CRESSENDOR, 36111003);
-                        } else {
-                            eff.applyTo(chr);
-                        }
-                    }
-
-                }
-
-            }*/
+            }
+               
         if ((chr == null) || (chr.isHidden()) || (chr.getMap() == null)) {
             c.getSession().write(CWvsContext.enableActions());
             return;
@@ -959,6 +947,7 @@ public class PlayerHandler {
                 
                 break;
             }
+
             case 30001061:
                 mobID = slea.readInt();
                 mob = chr.getMap().getMonsterByOid(mobID);
@@ -1021,8 +1010,15 @@ public class PlayerHandler {
             case 20040216:
             case 20040217:
             case 20040220:
-            case 20041239:
-                chr.changeLuminousMode(skillid);
+          //  case 20041239:
+               chr.changeLuminousMode(skillid);
+            //    chr.HandleOtherluminous();
+                c.getSession().write(CWvsContext.enableActions());
+                break;
+            case 27121100:
+                World.Broadcast.broadcastMessage(CField.getGameMessage("PlayerHandler.", (short) 8));
+                c.getSession().write(JobPacket.LuminousPacket.giveLuminousState(20040216, chr.getLightGauge(), chr.getDarkGauge(), 2000000000));
+            //    chr.HandleOtherluminous();
                 c.getSession().write(CWvsContext.enableActions());
                 break;
             case 11101022:
@@ -1033,14 +1029,21 @@ public class PlayerHandler {
                 chr.changeWarriorStance(skillid);
                 c.getSession().write(CWvsContext.enableActions());
                 break;
+                   case 36121054:
+                  //  chr.setXenonSurplus((short) 20);
+                    c.getSession().write(CWvsContext.enableActions());
+                    c.getSession().write(JobPacket.XenonPacket.giveAmaranthGenerator());
+                    break;
             case 4341003:
                 chr.setKeyDownSkill_Time(0L);
                 chr.getMap().broadcastMessage(chr, CField.skillCancel(chr, skillid), false);
             default:
+                
                 Point pos = null;
                 if ((slea.available() == 5L) || (slea.available() == 7L)) {
                     pos = slea.readPos();
                 }
+               
                 if (effect.isMagicDoor()) {
                     if (!FieldLimitType.MysticDoor.check(chr.getMap().getFieldLimit())) {
                         effect.applyTo(c.getPlayer(), pos);
@@ -1087,7 +1090,7 @@ public class PlayerHandler {
     }
 
     public static void closeRangeAttack(LittleEndianAccessor slea, MapleClient c, final MapleCharacter chr, final boolean energy) {
-        if ((chr == null) || ((energy) && (chr.getBuffedValue(MapleBuffStat.ENERGY_CHARGE) == null) && (chr.getBuffedValue(MapleBuffStat.BODY_PRESSURE) == null) && (chr.getBuffedValue(MapleBuffStat.DARK_AURA) == null) && (chr.getBuffedValue(MapleBuffStat.TORNADO) == null) && (chr.getBuffedValue(MapleBuffStat.SUMMON) == null) && (chr.getBuffedValue(MapleBuffStat.RAINING_MINES) == null) && (chr.getBuffedValue(MapleBuffStat.TELEPORT_MASTERY) == null))) {
+        if ((chr == null) || ((energy) && (chr.getBuffedValue(MapleBuffStat.ENERGY_CHARGE) == null) && (chr.getBuffedValue(MapleBuffStat.BODY_PRESSURE) == null) && (chr.getBuffedValue(MapleBuffStat.DARK_AURA) == null) && (chr.getBuffedValue(MapleBuffStat.TORNADO) == null) && (chr.getBuffedValue(MapleBuffStat.SUMMON) == null) && (chr.getBuffedValue(MapleBuffStat.RAINING_MINES) == null) && (chr.getBuffedValue(MapleBuffStat.ASURA) == null) && (chr.getBuffedValue(MapleBuffStat.TELEPORT_MASTERY) == null))) {
             return;
         }
         if ((chr.hasBlockedInventory()) || (chr.getMap() == null)) {
@@ -1127,7 +1130,7 @@ public class PlayerHandler {
             }
             if (GameConstants.isDemonAvenger(chr.getJob())) {
                 int exceedMax = chr.getSkillLevel(31220044) > 0 ? 18 : 20;
-                chr.showInfo("Info", false, "exceedMax;" + exceedMax);
+             //   chr.showInfo("Info", false, "exceedMax;" + exceedMax);
                 if (chr.getExceed() + 1 > exceedMax) {
                     chr.setExceed((short) exceedMax);
                 } else {
@@ -1169,6 +1172,8 @@ public class PlayerHandler {
                     }
                 }
             }
+
+             
             if (GameConstants.isAngelicBuster(chr.getJob())) {
                 int Recharge = effect.getOnActive();
                 if (Recharge > -1) {
@@ -1265,6 +1270,9 @@ public class PlayerHandler {
                 break;
         }
     }
+    
+    
+
 
     public static void rangedAttack(LittleEndianAccessor slea, MapleClient c, final MapleCharacter chr) {
         if (chr == null) {
@@ -1283,7 +1291,7 @@ public class PlayerHandler {
         MapleStatEffect effect = null;
         Skill skill = null;
         boolean AOE = attack.skill == 4111004;
-        boolean noBullet = (chr.getJob() >= 300 && chr.getJob() <= 322) || (chr.getJob() >= 3500 && chr.getJob() <= 3512) || GameConstants.isCannon(chr.getJob()) || GameConstants.isJett(chr.getJob()) || GameConstants.isPhantom(chr.getJob()) || GameConstants.isMercedes(chr.getJob()) || GameConstants.isZero(chr.getJob());
+        boolean noBullet = (chr.getJob() >= 300 && chr.getJob() <= 322) || (chr.getJob() >= 3500 && chr.getJob() <= 3512) || GameConstants.isCannon(chr.getJob()) || GameConstants.isXenon(chr.getJob()) || GameConstants.isJett(chr.getJob()) || GameConstants.isPhantom(chr.getJob()) || GameConstants.isMercedes(chr.getJob()) || GameConstants.isZero(chr.getJob());
         if (attack.skill != 0) {
             skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
             if ((skill == null) || ((GameConstants.isAngel(attack.skill)) && (chr.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
@@ -1424,9 +1432,12 @@ public class PlayerHandler {
                 case 14111008:
                 case 60011216://Soul Buster
                 case 65001100://Star Bubble
+               // case 2321054:
                     AOE = true;
                     bulletCount = effect.getAttackCount();
                     break;
+                    
+                 
                 case 35121005:
                 case 35111004:
                 case 35121013:
@@ -1612,7 +1623,7 @@ public class PlayerHandler {
             //chr.changeSkillLevel(SkillFactory.getSkill(20040220), (byte) 1, (byte) 1);
             //chr.changeSkillLevel(SkillFactory.getSkill(20041239), (byte) 1, (byte) 1);
             chr.setLuminousState(GameConstants.getLuminousSkillMode(skill.getId()));
-            c.getSession().write(JobPacket.LuminousPacket.giveLuminousState(GameConstants.getLuminousSkillMode(skill.getId()), chr.getLightGauge(), chr.getDarkGauge(), 0));
+            c.getSession().write(JobPacket.LuminousPacket.giveLuminousState(GameConstants.getLuminousSkillMode(skill.getId()), chr.getLightGauge(), chr.getDarkGauge(), 10000));
             SkillFactory.getSkill(GameConstants.getLuminousSkillMode(skill.getId())).getEffect(1).applyTo(chr);
         }
         attack = DamageParse.Modify_AttackCrit(attack, chr, 3, effect);
@@ -1679,6 +1690,7 @@ public class PlayerHandler {
             case 27111100: // Spectral Light
             case 27111202: // Moonlight Spear
             case 27121100: // Reflection
+            case 27001100:
             case 27121202: // Apocalypse
             case 2121006: // Paralyze
             case 2221003: // 
@@ -1688,6 +1700,12 @@ public class PlayerHandler {
             case 2111003: // Poison Mist
             case 2121003: // Myst Eruption
             case 22181002: // Dark Fog
+            case 2321054:
+            case 27121303:
+            case 27111303:
+            case 36121013:
+         //   case 36101009:
+       //     case 36111010:
                 bulletCount = effect.getAttackCount();
                 DamageParse.applyAttack(attack, skill, chr, skillLevel, maxdamage, effect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;
@@ -1707,14 +1725,21 @@ public class PlayerHandler {
         chr.getCheatTracker().checkDrop(true);
     }
 
-    public static void ChangeAndroidEmotion(int emote, MapleCharacter chr) {
-        //if ((emote > 0) && (chr != null) && (chr.getMap() != null) && (!chr.isHidden()) && (emote <= 17) && (chr.getAndroid() != null))
-        //chr.getMap().broadcastMessage(CField.showAndroidEmotion(chr.getId(), emote));
+
+public static void ChangeAndroidEmotion(int emote, MapleCharacter chr) {//MIXTAMAL6
+        
+        if ((emote > 0) && (chr != null) && (chr.getMap() != null) && (!chr.isHidden()) && (emote <= 17) && (chr.getAndroid() != null)) {
+            
+            chr.getMap().broadcastMessage(CField.showAndroidEmotion(chr.getId(), (byte) emote));
+            
+        }
+        
     }
 
-    public static void MoveAndroid(LittleEndianAccessor slea, MapleClient c, MapleCharacter chr) {
-        slea.skip(12);
-        List res = MovementParse.parseMovement(slea, 3);
+    public static void MoveAndroid(LittleEndianAccessor slea, MapleClient c, MapleCharacter chr) {//MIXTAMAL6
+        slea.skip(12);//MIXTAMAL6
+        final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 3);//MIXTAMAL6
+       
 
         if ((res != null) && (chr != null) && (!res.isEmpty()) && (chr.getMap() != null) && (chr.getAndroid() != null)) {
             Point pos = new Point(chr.getAndroid().getPos());

@@ -180,9 +180,9 @@ public class GameConstants {
     public static final int[] rankB = {70000014, 70000015, 70000016, 70000017, 70000018, 70000021, 70000022, 70000023, 70000024, 70000025, 70000026};
     public static final int[] rankA = {70000027, 70000028, 70000029, 70000030, 70000031, 70000032, 70000033, 70000034, 70000035, 70000036, 70000039, 70000040, 70000041, 70000042};
     public static final int[] rankS = {70000043, 70000044, 70000045, 70000047, 70000048, 70000049, 70000050, 70000051, 70000052, 70000053, 70000054, 70000055, 70000056, 70000057, 70000058, 70000059, 70000060, 70000061, 70000062};
-    public static final int[] circulators = {2700000, 2700100, 2700200, 2700300, 2700400, 2700500, 2700600, 2700700, 2700800, 2700900, 2701000};
+    public static final int[] circulators = {2702000, 2700000, 2700100, 2700200, 2700300, 2700400, 2700500, 2700600, 2700700, 2700800, 2700900, 2701000};
     public static final int JAIL = 180000004, MAX_BUFFSTAT = 12;
-    public static final int[] blockedSkills = {4341003};
+    public static final int[] blockedSkills = {4341003, 36120045};
     public static final String[] RESERVED = {"Alpha", "Aristocat", "Donor", "MapleNews", "Hack"};
     public static final String[] stats = {"tuc", "reqLevel", "reqJob", "reqSTR", "reqDEX", "reqINT", "reqLUK", "reqPOP", "cash", "cursed", "success", "setItemID", "equipTradeBlock", "durability", "randOption", "randStat", "masterLevel", "reqSkillLevel", "elemDefault", "incRMAS", "incRMAF", "incRMAI", "incRMAL", "canLevel", "skill", "charmEXP"};
     public static final int[] hyperTele = {10000, 20000, 30000, 40000, 50000, 1000000, 1010000, 1020000, 2000000, //Maple Island
@@ -562,6 +562,17 @@ public class GameConstants {
         }
         return false;
     }
+    
+    
+    public static int getKaiserMode(int id) {
+        switch (id) {
+            case 61100005:
+            case 61110005:
+            case 61120010:
+                return 60001216;
+        }
+        return 0;
+    }
 
     public static int getLuminousSkillMode(int id) {
         switch (id) {
@@ -578,11 +589,36 @@ public class GameConstants {
             case 27121202:
             case 27120211:
                 return 20040217;//dark
-            case 27111303:
-            case 27121303:
-                return 20040220;
+ //           case 27111303:
+ //           case 27121303:
+ //               return 20040220;
         }
         return 0;
+    }
+    
+    
+        public static boolean isLightSkills(int skillid) {
+        switch (skillid) {
+            case 20041226: // 스펙트럴 라이트 (기본 직업)
+            case 27001100: // 트윙클 플래쉬
+            case 27101100: // 실피드 랜서
+            case 27111100: // 스펙트럴 라이트
+            case 27121100: // 라이트 리플렉션
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean isDarkSkills(int skillid) {
+        switch (skillid) {
+            case 27001201: // 다크 폴링
+            case 27101202: // 보이드 프레셔
+            case 27111202: // 녹스피어
+            case 27121201: // 모닝 스타폴
+            case 27121202: // 아포칼립스
+                return true;
+        }
+        return false;
     }
 
     public static int getLinkSkillByJob(final int job) {
@@ -631,15 +667,30 @@ public class GameConstants {
         return false;
     }
 
+    public static boolean iskaiser_Transfiguration_Skill(int id) {
+        Skill skill = SkillFactory.getSkill(getLinkedAttackSkill(id));
+        if ((skill.getName().contains("(Transfiguration)")) || (skill.getId() == 61111114) || (skill.getId() == 61121015) || (skill.getId() == 61121116) || (skill.getId() == 61120018) || (skill.getId() == 61001004) || (skill.getId() == 61001005) || (skill.getId() == 61110009) || (skill.getId() == 61111113) || (skill.getId() == 61120008)) {
+            return true;
+        }
+        return false;
+    }
+    
     public static boolean isLinkedAttackSkill(final int id) {
         return getLinkedAttackSkill(id) != id;
     }
 
     public static final int getLinkedAttackSkill(final int id) {
         switch (id) {
+            case 36121013:
+            case 36121014:
+                return 36121002;
+            case 21110015:
             case 21110007:
             case 21110008:
                 return 21110002;
+            case 21000006:
+                    return 21000002;
+            case 21120015:
             case 21120009:
             case 21120010:
                 return 21120002;
@@ -734,6 +785,7 @@ public class GameConstants {
                 return 24111006;
             case 5001008:
                 return 5001005;
+            case 61121053://kaiser hyper
             case 61120008:
                 return 61111008;
             case 51100006:
@@ -769,8 +821,8 @@ public class GameConstants {
             case 36101008:
             case 36101009:
                 return 36101000;
-            case 36111009:
             case 36111010:
+            case 36111009:
                 return 36111000;
             case 36121011:
             case 36121012:
@@ -842,7 +894,7 @@ public class GameConstants {
                 return 101120204;
             case 101120200:
                 return 101121200;
-                            case 41001005:
+            case 41001005:
             case 41001004:
                 return 41001000;
             case 41101009:
@@ -851,9 +903,12 @@ public class GameConstants {
             case 41111012:
             case 41111011:
                 return 41111000;
-            case 41120013:
-            case 41120012:
-            case 41120011:
+            case 41001000:
+                return 41001002;
+           // case 41120013:
+            case 41001002:
+            case 41121012:
+            case 41121011:
                 return 41121000;
             case 42001006:
             case 42001005:
@@ -862,12 +917,36 @@ public class GameConstants {
                 return 42001002;
             case 42100010:
                 return 42101001;
+            case 33101006:
+            case 33101007:
+                return 33101005;
+            case 35001001:
+                return 35101009;
+            case 42111011:
+                return 42111000;
             // 플위 끝
         }
         return id;
     }
 
 
+        public static boolean isSpecialBuff(final int skillid) {
+        switch (skillid) {
+            case 23101003://Spirit Surge
+            case 65101002://Power Transfer
+            case 4111002://Final Feint
+            case 4211008://Shadow Partner
+            case 14111000://Shadow Partner
+            case 4331002://Mirror Image
+            case 36111006://Manifest Projector
+            case 15121004://Arc Charger
+            case 31121054://Blue Blood
+            case 65121004://Star Gazer
+                return true;
+        }
+        return false;
+    }  
+    
     public final static boolean isForceIncrease(int skillid) {
         switch (skillid) {
             case 24100003:
@@ -3319,6 +3398,7 @@ public class GameConstants {
             case 6512:
                 return 3;
             case 508:
+            case 3101:
                 return 0;
         }
         if (isSeparatedSp(job)) {
@@ -4198,6 +4278,8 @@ public class GameConstants {
         }
         return 0;
     }
+    
+ 
 
     public static int getExpRate_Below10(final int job) {
         //if (GameConstants.isEvan(job)) {
@@ -5126,6 +5208,30 @@ public class GameConstants {
                     1040122, 2510023, 1052075, 2510022};
                 break;
             case 2028156:
+                items = new int[]{1082151, 1082153, 1082213, 1072223, 1072272,
+                    1072269, 1072226, 1082168, 1082167, 1072222, 2510050,
+                    1082159, 2510072, 1082139, 1082154, 1082140, 1072321,
+                    1072273, 2510066, 1072215, 2510068};
+                break;
+        }
+        for (int i : items) {
+            list.add(i);
+        }
+        return list;
+    }
+    
+    
+        public static List<Integer> getMasteryBook(int itemId) {
+        List<Integer> list = new LinkedList();
+        int[] items = {};
+        switch (itemId) {
+            case 2290868:
+                items = new int[]{2510028, 1050104, 1052131, 1050106, 1050099,
+                    1050107, 1052072, 1050098, 1050096, 1052076, 1051101,
+                    1041122, 1052071, 2510035, 1061123, 1051106, 1050103,
+                    1040122, 2510023, 1052075, 2510022};
+                break;
+            case 2290869:
                 items = new int[]{1082151, 1082153, 1082213, 1072223, 1072272,
                     1072269, 1072226, 1082168, 1082167, 1072222, 2510050,
                     1082159, 2510072, 1082139, 1082154, 1082140, 1072321,

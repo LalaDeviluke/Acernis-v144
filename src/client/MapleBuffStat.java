@@ -22,7 +22,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     POWERGUARD(0x1000, 1),
     MAXHP(0x2000, 1),
     MAXMP(0x4000, 1),
-    INVINCIBLE(0x8000, 1),
+    INVINCIBLE(0x8000, 1),//0x800000000000L ??
     SOULARROW(0x10000, 1),
     STUN(0x20000, 1),
     POISON(0x40000, 1),
@@ -34,6 +34,10 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     DRAGONBLOOD(0x800000, 1),
     HOLY_SYMBOL(0x1000000, 1),
     MESOUP(0x2000000, 1),
+    Battoujutsu(0x2000000, 11),
+    Battoujutsu2(0x80000, 11),
+    Battoujutsu3(0x40000, 11),
+    CRITICAL_DAMAGE(32768, 6),
     SHADOWPARTNER(0x4000000, 1), // d
     PICKPOCKET(0x8000000, 1),
     PUPPET(0x8000000, 1), // HACK - shares buffmask with pickpocket - odin special ^.-
@@ -96,6 +100,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     SOARING(0x10000, 3),
     FREEZE(0x80000, 3),
     LIGHTNING_CHARGE(0x100000, 3),
+    LIGHTNING(0x80, 10),
     ENRAGE(0x200000, 3),
     OWL_SPIRIT(0x400000, 3),
     //0x800000 debuff, shiny yellow
@@ -121,17 +126,21 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     REAPER(0x800, 4),
     INFILTRATE(0x1000, 4),
     MECH_CHANGE(0x2000, 4), //0x10000000, 12
+    FIRE_AURA(0x80000000, 10),
+    AURA(4096, 4),
     DARK_AURA(0x2000, 4),
     BLUE_AURA(0x4000, 4),
     YELLOW_AURA(0x8000, 4),
     BODY_BOOST(0x10000, 4),//0x40000
-    FELINE_BERSERK(131072, 4),//0x80000
+    FELINE_BERSERK(0x20000, 4),//0x80000
+    OverWelming_PWR(0x80000000, 7),
+    INDIEBOOSTER(4096, 7, true),
     DICE_ROLL(0x40000, 4),//0x100000
     DIVINE_SHIELD(0x80000, 4),//0x200000
     DAMAGE_RATE(0x100000, 4),//0x400000
     TELEPORT_MASTERY(0x200000, 4),//-2
     COMBAT_ORDERS(0x400000, 4),//0x1000000
-    BEHOLDER(0x800000, 4),//-2test
+    BEHOLDER(0x200000, 4),//-2 ?
     DISABLE_POTENTIAL(0x4000000, 4),
     GIANT_POTION(0x8000000, 4),
     ONYX_SHROUD(0x10000000, 4),
@@ -149,6 +158,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     DEX(0x40, 5),//-2
     LUK(0x80, 5),//-2
     ATTACK(0x100, 5), //used also for kaiser majesty //-2
+    ANGEL(0x100, 9),
     //8 unknown tornado debuff? - hp
     INDIE_PAD(0x400, 5, true), // indiePad
     INDIE_MAD(0x800, 5, true),
@@ -182,7 +192,8 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     ABNORMAL_STATUS_R(0x10, 6), // %
     ELEMENTAL_STATUS_R(0x20, 6), // %
     WATER_SHIELD(0x40, 6),
-    DARK_METAMORPHOSIS(0x800, 6), // mob count
+    DARK_METAMORPHOSIS(128, 6), // mob count
+    PIRATES_REVENGE(1048576, 4),
     BARREL_ROLL(0x1000, 6),
     DAMAGE_R(0x200, 6),
     MDEF_BOOST(0x2000, 6),
@@ -214,6 +225,8 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     // 0x40 add attack, 425 wd, 425 md, 260 for acc, and avoid
     // 0x80
     ATTACK_SPEED(0x100, 7), //UNIGNORABLE_PDR or DAMAGE_REFLECT or ATTACK_SPEED or WATK
+    ATTACK_SPEED2(0x100, 7, true),
+    DAMAGE_RESIST(0x8000, 9),
     HP_BOOST_PERCENT(0x200, 7, true),
     MP_BOOST_PERCENT(0x400, 7, true),
     //WEAPON_ATTACK(0x800, 7),
@@ -243,6 +256,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     PRESSURE_VOID(0x1000, 8),
     LUNAR_TIDE(0x2000, 8), //hp to damage
     KAISER_COMBO(0x8000, 8),
+    KAISER_MORPH_GAUGE(0x8000, 1),//Pure KMS guess..
     IGNORE_MONSTER_DEF(0x10000, 5),
     KAISER_MODE_CHANGE(0x20000, 8),
     TEMPEST_BLADES(0x100000, 8),
@@ -262,7 +276,8 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     KAISER_MAJESTY3(0x2, 9), //UNIGNORABLE_PDR or DAMAGE_REFLECT or ATTACK_SPEED or WATK
     KAISER_MAJESTY4(0x4, 9), //UNIGNORABLE_PDR or DAMAGE_REFLECT or ATTACK_SPEED or WATK\
     PARTY_STANCE(0x10, 9),
-    STATUS_RESIST_TWO(0x20, 9),
+    STATUS_RESIST_TWO(0x10, 9),
+    ELEMENT_RESIST_TWO(0x20, 9, true),
     BOWMASTERHYPER(0x400, 9),
     CRITICAL_PERCENT_UP(0x40000, 9), //critical or damage%
     MOON_STANCE2(0x80000000, 9), //critical or damage%
@@ -270,7 +285,8 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     EXCEED_ATTACK(0x4000000, 9),
     EXCEED(0x40000000, 9),
     DIABOLIC_RECOVERY(0x8000000, 9),
-    BOSS_DAMAGE(0x1000000, 9),
+    BOSS_DAMAGE(0x10000, 9, true),
+    BOSS_ATTDMG(16777216, 9),
     SUPPLY_SURPLUS(0x2, 10),
     XENON_FLY(0x10, 10),
     AMARANTH_GENERATOR(0x20, 10),
@@ -287,9 +303,12 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     SOUL_ELEMENT(0x40000, 10),
     EQUINOX_STANCE(0x80000, 10),
     SOLUNA_EFFECT(0x10000,10),
-    BATTOUJUTSU_STANCE(0x400000, 10),
+    BATTOUJUTSU_STANCE(0x2, 12),//confirm
+    HAYATO_ATTACK_SPEED(0x4, 12),//confirm
+    HAYATO_STANCE(0x100, 12),//not sure  
+    BATTOUJUTSU_STANCEnew(0x40000, 11),
     CROSS_SURGE(0x8000000, 10),
-    HP_RECOVER(0x40000000, 10),
+    HP_RECOVER(0x4000000, 10),
     PARASHOCK_GUARD(0x80000000, 10, true),
     PASSIVE_BLESS(0x4, 11),
     DIVINE_FORCE_AURA(0x1000, 11),
@@ -300,12 +319,11 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     HAYATO3(0x20, 12),
     HAYATO4(0x40, 12),
     HAYATO5(0x80, 12),
-    HAYATO_STANCE(0x100, 12),
+ //   HAYATO_STANCE(0x100, 12),
     FOX_FIRE(0x2000, 12),
     HAKU_REBORN(0x4000, 12), // 0x100000, 10
     HAKU_BLESS(0x8000, 12),
     BEARASSAULT(0x6000, 1),
-    WILL_OF_SWORD(0x100000, 8),
     ANIMAL_SELECT(0x100000, 12),
     ASURA(0x10000, 9);
     private static final long serialVersionUID = 0L;

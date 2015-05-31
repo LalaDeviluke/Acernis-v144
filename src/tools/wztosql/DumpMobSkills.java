@@ -109,7 +109,7 @@ public class DumpMobSkills {
                 ps.setInt(8, MapleDataTool.getInt("prop", lvlz, 100)); // / 100.0
                 ps.setInt(9, MapleDataTool.getInt("limit", lvlz, 0));
                 ps.setInt(10, MapleDataTool.getInt("summonEffect", lvlz, 0));
-                ps.setInt(11, MapleDataTool.getInt("interval", lvlz, 0)); // * 1000
+                ps.setInt(11, MapleDataTool.getInt("interval", lvlz, 1)); // * 1000
 
                 StringBuilder summ = new StringBuilder();
                 List<Integer> toSummon = new ArrayList<>();

@@ -3,7 +3,6 @@
  Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
  Matthias Butz <matze@odinms.de>
  Jan Christian Meyer <vimes@odinms.de>
-
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License version 3
  as published by the Free Software Foundation. You may not use, modify
@@ -14,12 +13,13 @@
  but WITHOUT ANY WARRANTY; without even the implied wavrranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Affero General Public License for more details.
-
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package scripting;
 
+import client.InnerAbillity;
+import client.InnerSkillValueHolder;
 import client.MapleCharacter;
 import client.MapleCharacterUtil;
 import client.MapleClient;
@@ -167,6 +167,36 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public String getDimensionalMirror(MapleCharacter character) {
         return MapleSlideMenu.SlideMenu0.getSelectionInfo(character, id);
     }
+    
+    
+    public void ResetInnerPot() {
+   //             int itemid = slea.readInt();
+     //   short slot = (short) slea.readInt();
+     //   Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
+            List<InnerSkillValueHolder> newValues = new LinkedList();
+            int i = 0;
+            for (InnerSkillValueHolder isvh : c.getPlayer().getInnerSkills()) {
+                    newValues.add(InnerAbillity.getInstance().renewSkill(isvh.getRank(), 2702000, true));
+                }
+
+                i++;
+            c.getPlayer().getInnerSkills().clear();
+            for (InnerSkillValueHolder isvh : newValues) {
+                c.getPlayer().getInnerSkills().add(isvh);
+            }
+
+     //       c.getPlayer().getInventory(MapleInventoryType.USE).removeItem(slot, (short) 1, false);
+
+            c.getSession().write(CField.getCharInfo(c.getPlayer()));
+            c.getSession().write(CWvsContext.enableActions());
+            c.getPlayer().fakeRelog2();
+          //  MapleMap currentMap = c.getPlayer().getMap();
+          //  currentMap.removePlayer(c.getPlayer());
+          //  currentMap.addPlayer(c.getPlayer());
+
+            c.getPlayer().dropMessage(5, "Inner Potential has been reconfigured.");
+        }
+
     
     public String getSlideMenuSelection(int type) {
         switch (type) {
@@ -587,10 +617,27 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             getPlayer().equipChanged();
         }
     }
+    
+    
+        public void setSecondHair(int hair) {
+        if (hairExists(hair)) {
+            getPlayer().setSecondHair(hair);
+            getPlayer().updateSingleStat(MapleStat.HAIR, hair);
+            getPlayer().equipChanged();
+        }
+    }
 
     public void setFace(int face) {
         if (faceExists(face)) {
             getPlayer().setFace(face);
+            getPlayer().updateSingleStat(MapleStat.FACE, face);
+            getPlayer().equipChanged();
+        }
+    }
+    
+        public void setSecondFace(int face) {
+        if (faceExists(face)) {
+            getPlayer().setSecondFace(face);
             getPlayer().updateSingleStat(MapleStat.FACE, face);
             getPlayer().equipChanged();
         }
@@ -783,6 +830,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         MapleQuest.getInstance(idd).forfeit(getPlayer());
     }
 
+    
     public void forceStartQuest() {
         MapleQuest.getInstance(id2).forceStart(getPlayer(), getNpc(), null);
     }
@@ -1283,6 +1331,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public void sendTimeGateWindow() {
         c.getSession().write(UIPacket.openUI(0xA8));
     }
+    
+    public void SendEvolution() {
+        c.getSession().write(UIPacket.openUI(100));
+    }
 
     public void sendRepairWindow() {
         c.getSession().write(UIPacket.sendRepairWindow(id));
@@ -1491,6 +1543,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
           System.out.println("Please insert an item-id to equip.");
         
     }  
+    
     
     public static int editEquipById(MapleCharacter chr, int max, int itemid, String stat, int newval) {
         return editEquipById(chr, max, itemid, stat, (short) newval);
@@ -2601,14 +2654,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     /*
      public final int WEAPON_RENTAL = 57463816;
-
      public int weaponRentalState() {
      if (c.getPlayer().getIntNoRecord(WEAPON_RENTAL) == 0) {
      return 0;
      }
      return (System.currentTimeMillis() / (60 * 1000) - c.getPlayer().getIntNoRecord(WEAPON_RENTAL)) >= 15 ? 1 : 2;
      }
-
      public void setWeaponRentalUnavailable() {
      c.getPlayer().getQuestNAdd(MapleQuest.getInstance(WEAPON_RENTAL)).setCustomData("" + System.currentTimeMillis() / (60 * 1000));
      }
@@ -2772,6 +2823,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.getSession().write(CField.UIPacket.IntroEnableUI(0));
     }
     
+    public void moveScreen(int x) {
+        c.getSession().write(CField.UIPacket.moveScreen(x));
+    }
+    
    public void showAdvanturerBoatScene() {
         try {
             c.getSession().write(UIPacket.getDirectionStatus(true));
@@ -2801,5 +2856,20 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             NPCScriptManager.getInstance().dispose(c);
             c.removeClickedNPC();
             NPCScriptManager.getInstance().start(c, 10306, "ExplorerTut08");
+    }
+      
+            public final void UnlockHonor() {
+         c.getPlayer().HonorUnlock();
+          c.getPlayer().dropMessage(5, "Slot 1 Inner potential opened.");
+    }
+        
+        public final void UnlockHonor2() {
+         c.getPlayer().HonorUnlock2();
+         c.getPlayer().dropMessage(5, "Slot 2 Inner potential opened.");
+    }
+                
+         public final void UnlockHonor3() {
+         c.getPlayer().HonorUnlock3();
+         c.getPlayer().dropMessage(5, "Slot 3 Inner potential opened.");
     }
   }

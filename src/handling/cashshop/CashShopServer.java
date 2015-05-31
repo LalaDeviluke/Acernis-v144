@@ -17,7 +17,7 @@ public class CashShopServer {
 
     private static String ip;
     private static InetSocketAddress InetSocketadd;
-    private final static int PORT = 8600;
+    private final static int PORT = 8610;
     private static IoAcceptor acceptor;
     private static PlayerStorage players;
     private static boolean finishedShutdown = false;

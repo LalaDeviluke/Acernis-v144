@@ -29,9 +29,9 @@ public class JobConstants {
         Kaiser(11, JobFlag.ENABLED),
         AngelicBuster(12, JobFlag.ENABLED),
         Cannoneer(13, JobFlag.ENABLED),
-        Xenon(14, JobFlag.ENABLED),
+        Xenon(14, JobFlag.DISABLED),
         Zero(15, JobFlag.ENABLED),
-        Jett(16, JobFlag.ENABLED),
+        Jett(16, JobFlag.DISABLED),
         Hayato(17, JobFlag.ENABLED),
         Kanna(18, JobFlag.ENABLED);
         private final int jobType, flag;

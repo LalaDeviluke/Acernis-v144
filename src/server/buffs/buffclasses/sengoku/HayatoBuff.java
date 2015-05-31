@@ -2,10 +2,12 @@
 package server.buffs.buffclasses.sengoku;
 
 import client.MapleBuffStat;
+import client.MonsterStatus;
 import constants.GameConstants;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.buffs.AbstractBuffClass;
+import tools.packet.CWvsContext;
 
 
 /**
@@ -35,12 +37,14 @@ public class HayatoBuff extends AbstractBuffClass {
     @Override
     public void handleBuff(MapleStatEffect eff, int skill) {
         switch (skill) {
-            case 41001001: // Battoujutsu Stance - fixpls!!
-//                eff.info.put(MapleStatInfo.time, Integer.valueOf(2100000000));
-//                eff.statups.put(MapleBuffStat.CRITICAL_RATE, Integer.valueOf(-((Integer) eff.info.get(MapleStatInfo.y)).intValue()));
-//                eff.statups.put(MapleBuffStat.HAYATO_STANCE, Integer.valueOf(-1));
-//                eff.statups.put(MapleBuffStat.HAYATO_STANCE, eff.info.get(MapleStatInfo.prop));
-//                eff.statups.put(MapleBuffStat.CRITICAL_RATE, eff.info.get(MapleStatInfo.x));
+            case 41110008:
+            case 41001001: // Battoujutsu Stance
+                eff.info.put(MapleStatInfo.time, Integer.valueOf(2100000000));
+                eff.statups.put(MapleBuffStat.CRITICAL_DAMAGE, eff.info.get(MapleStatInfo.y));
+                eff.statups.put(MapleBuffStat.BATTOUJUTSU_STANCE, 1);
+                eff.statups.put(MapleBuffStat.BOOSTER, eff.info.get(MapleStatInfo.actionSpeed));
+                eff.statups.put(MapleBuffStat.HAYATO_STANCE, eff.info.get(MapleStatInfo.prop));
+                CWvsContext.enableActions();
                 break;
             case 41101003: // Military Might
                 eff.statups.put(MapleBuffStat.JUMP, eff.info.get(MapleStatInfo.jump));

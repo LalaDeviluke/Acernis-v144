@@ -62,8 +62,8 @@ public class MobHandler {
 
             if (size > 0) {
                 Pair skillToUse = (Pair) monster.getSkills().get((byte) Randomizer.nextInt(size));
-                realskill = ((Integer) skillToUse.getLeft()).intValue();
-                level = ((Integer) skillToUse.getRight()).intValue();
+                realskill = ((Integer) skillToUse.getLeft());
+                level = ((Integer) skillToUse.getRight());
 
                 MobSkill mobSkill = MobSkillFactory.getMobSkill(realskill, level);
 

@@ -25,7 +25,7 @@ public class FarmServer {
 
     private static String ip;
     private static InetSocketAddress InetSocketadd;
-    private static final int PORT = 8601;
+    private static final int PORT = 8611;
     private static IoAcceptor acceptor;
     private static PlayerStorage players;
     private static boolean finishedShutdown = false;
@@ -43,11 +43,11 @@ public class FarmServer {
         cfg.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
         players = new PlayerStorage(-30);
         try {
-            InetSocketadd = new InetSocketAddress(8601);
+            InetSocketadd = new InetSocketAddress(PORT);
             acceptor.bind(InetSocketadd, new MapleServerHandler(), cfg);
-            System.out.println("Farm Server is listening on port 8601.");
+            System.out.println("Farm Server is listening on port" + PORT + ".");
         } catch (IOException e) {
-            System.err.println("Binding to port 8601 failed");
+            System.err.println("Binding to port " + PORT + " failed");
             throw new RuntimeException("Binding failed.", e);
         }
     }

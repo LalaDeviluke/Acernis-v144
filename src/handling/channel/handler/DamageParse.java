@@ -15,6 +15,7 @@ import client.inventory.MapleInventoryType;
 import com.sun.media.sound.SF2Modulator;
 import constants.GameConstants;
 import constants.ServerConstants;
+import handling.world.World;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +34,9 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.quest.MapleQuest;
 import tools.AttackPair;
+import static tools.HexTool.getByteArrayFromHexString;
 import tools.Pair;
+import tools.Triple;
 import tools.data.LittleEndianAccessor;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -182,6 +185,7 @@ public class DamageParse {
                 int fixeddmg = monsterstats.getFixedDamage();
                 boolean Tempest = (monster.getStatusSourceID(MonsterStatus.FREEZE) == 21120006) || (attack.skill == 21120006) || (attack.skill == 1221011);
 
+                
                 if ((!Tempest) && (!player.isGM())) {
                     if (((player.getJob() >= 3200) && (player.getJob() <= 3212) && (!monster.isBuffed(MonsterStatus.DAMAGE_IMMUNITY)) && (!monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) && (!monster.isBuffed(MonsterStatus.MAGIC_DAMAGE_REFLECT))) || (attack.skill == 3221007) || (attack.skill == 23121003) || (((player.getJob() < 3200) || (player.getJob() > 3212)) && (!monster.isBuffed(MonsterStatus.DAMAGE_IMMUNITY)) && (!monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) && (!monster.isBuffed(MonsterStatus.WEAPON_DAMAGE_REFLECT)))) {
                         maxDamagePerHit = CalculateMaxWeaponDamagePerHit(player, monster, attack, theSkill, effect, maxDamagePerMonster, Integer.valueOf(CriticalDamage));
@@ -291,6 +295,7 @@ public class DamageParse {
                     if ((GameConstants.isPhantom(player.getJob())) && (attack.skill != 24120002) && (attack.skill != 24100003)) {
                         player.handleCardStack();
                     }
+
                     if (GameConstants.isKaiser(player.getJob())) {
                         player.handleKaiserCombo();
                     }
@@ -433,7 +438,52 @@ public class DamageParse {
             }
         }
         
-        
+                       if (GameConstants.isLuminous(player.getJob())) {
+                       if (player.getBuffedValue(MapleBuffStat.DARK_CRESCENDO) != 1); {
+                        MapleStatEffect crescendo = SkillFactory.getSkill(27121005).getEffect(player.getSkillLevel(27121005));
+                        if (crescendo != null) {
+
+                            if (crescendo.makeChanceResult()) {
+                                player.setLastCombo(System.currentTimeMillis());
+                                if (player.acaneAim <= 29) {
+                                    player.acaneAim++;
+                                    crescendo.applyTo(player);
+                                }
+                            }
+                        }
+                    }
+                  }
+ 
+                     
+                     
+                     if (player.getJob() >= 1500 && player.getJob() <= 1512) {
+                        MapleStatEffect crescendo = SkillFactory.getSkill(15001022).getEffect(player.getSkillLevel(15001022));
+                        if (crescendo != null) {
+
+                            if (crescendo.makeChanceResult()) {
+                                player.setLastCombo(System.currentTimeMillis());
+                                if (player.acaneAim <= 3) {
+                                    player.acaneAim++;
+                                    crescendo.applyTo(player);
+                                }
+                            }
+                        }
+                    }
+                     
+                        if (player.getJob() >= 420 && player.getJob() <= 422) {
+                        MapleStatEffect crescendo = SkillFactory.getSkill(4200013).getEffect(player.getSkillLevel(4200013));
+                        if (crescendo != null) {
+
+                            if (crescendo.makeChanceResult()) {
+                                player.setLastCombo(System.currentTimeMillis());
+                                if (player.acaneAim <= 30) {
+                                    player.acaneAim++;
+                                    crescendo.applyTo(player);
+                                }
+                            }
+                        }
+                    }
+                     
         if ((attack.skill == 4331003) && ((hpMob <= 0L) || (totDamageToOneMonster < hpMob))) {
             return;
         }
@@ -1128,6 +1178,9 @@ public class DamageParse {
             if (lea.available() >= 4L) {
                 ret.position = lea.readPos();
             }
+       //     if (ret.skill == 2321054){//Asura - Mixtamal6
+       //     lea.skip(3); //new
+     //   } 
             return ret;
         } catch (Exception e) {
         }
@@ -1146,7 +1199,7 @@ public class DamageParse {
         if (GameConstants.isZero(chr.getJob()) && ret.skill != 0) {
             lea.skip(1); //zero has byte
         }
-        if (ret.skill == 2221012 || ret.skill == 36101008 || ret.skill == 36101001 || ret.skill == 36111009 || ret.skill == 42120003) {
+        if (ret.skill == 2221012|| ret.skill == 36101001 || ret.skill == 42120003) {
             lea.skip(1);
         }
         lea.skip(1);
@@ -1164,6 +1217,8 @@ public class DamageParse {
             case 5301001:
             case 11121052:// Styx Crossing
             case 11121055:// Styx Crossing charged
+            case 31201001:
+            case 31211001:
             case 14111006:
             case 24121000:
             case 24121005:
@@ -1189,6 +1244,8 @@ public class DamageParse {
             case 101120200:
             case 101120203:
             case 101120205:
+            case 32121003: //Tornado Spin
+         //   case 36121001:
                 ret.charge = lea.readInt();
                 break;
             default:
@@ -1197,7 +1254,7 @@ public class DamageParse {
 
         ret.unk = lea.readByte();
         ret.display = lea.readUShort();
-        if (ret.skill == 2221012 || ret.skill == 36101001 || ret.skill == 36111009 ||ret.skill == 42120003) {
+        if (ret.skill == 2221012 || ret.skill == 36101001 ||ret.skill == 42120003) {
             lea.skip(4);
         } else {
             lea.skip(5);
@@ -1283,7 +1340,7 @@ public class DamageParse {
         ret.unk = lea.readByte();
         ret.display = lea.readUShort();
         lea.skip(5);
-        if (ret.skill == 23111001) {
+        if (ret.skill == 23111001 || ret.skill == 36111010) {
             lea.skip(12);
         } else if (ret.skill == 3121013) {// Arrow Blaster
             lea.skip(8);

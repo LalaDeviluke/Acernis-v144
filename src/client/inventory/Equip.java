@@ -601,9 +601,9 @@ public class Equip extends Item implements Serializable {
         }
         setPotential1(potentialState);
         setPotential2((Randomizer.nextInt(half ? 5 : 10) == 0 ? potentialState : 0)); //1/10 chance of 3 line
-        setPotential3(0); //just set it theoretically
-        setPotential4(0);
-        setPotential5(0);
+        setPotential3((Randomizer.nextInt(half ? 5 : 10) == 0 ? potentialState : 0)); //just set it theoretically
+        setPotential4((Randomizer.nextInt(half ? 5 : 10) == 0 ? potentialState : 0));
+        setPotential5((Randomizer.nextInt(half ? 5 : 10) == 0 ? potentialState : 0));
     }
 
     public void resetBonusPotential_Fuse(boolean half, int potentialState) { //maker skill - equip first receive
@@ -623,7 +623,10 @@ public class Equip extends Item implements Serializable {
         final int rank = Randomizer.nextInt(100) < 4 ? (Randomizer.nextInt(100) < 4 ? -19 : -18) : -17;
         setPotential1(rank);
         setPotential2((Randomizer.nextInt(10) == 0 ? rank : 0)); //1/10 chance of 3 line
-        setPotential3(0); //just set it theoretically
+        setPotential3((Randomizer.nextInt(10) == 0 ? rank : 0)); //just set it theoretically
+        setPotential4((Randomizer.nextInt(10) == 0 ? rank : 0));
+        setPotential5((Randomizer.nextInt(10) == 0 ? rank : 0));
+        setPotential6((Randomizer.nextInt(10) == 0 ? rank : 0));
     }
 
     public void resetBonusPotential() {
@@ -632,6 +635,7 @@ public class Equip extends Item implements Serializable {
         setBonusPotential2((Randomizer.nextInt(10) == 0 ? rank : 0)); //1/10 chance of 3 line
         setBonusPotential3(0); //just set it theoretically
     }
+    
 
     public void renewPotential(int type, int line, int toLock, boolean bonus) { // 0 = normal miracle cube, 1 = premium, 2 = epic pot scroll, 3 = super, 5 = enlightening
         int miracleRate = 1;
@@ -667,13 +671,15 @@ public class Equip extends Item implements Serializable {
                     setPotential2(Randomizer.nextInt(10) <= 3 ? rank : 0); //4/10 chance of 3 line
                     break;
                 case 5: // enlightening
-                    setPotential2(Randomizer.nextInt(10) <= 2 ? rank : 0); //3/10 chance of 3 line
+                    setPotential4(Randomizer.nextInt(10) <= 2 ? rank : 0); //3/10 chance of 3 line
+               //     setBonusPotential2(Randomizer.nextInt(10) <= 2 ? rank : 0); //3/10 chance of 3 line
                     break;
                 case 6: // master
                     if (!bonus) {
                         return;
                     }
                     setBonusPotential2(Randomizer.nextInt(10) <= 2 ? rank : 0); //3/10 chance of 3 line
+                    setPotential2(Randomizer.nextInt(10) <= 2 ? rank : 0); //3/10 chance of 3 line
                     break;
                 default:
                     setPotential2(0);

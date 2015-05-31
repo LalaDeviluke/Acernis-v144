@@ -13,13 +13,13 @@ import tools.Pair;
 
 public class Skill implements Comparator<Skill> {
 
-    private String name = "";
+    private String name = "", psdDamR = "", targetPlus = "";
     private final List<MapleStatEffect> effects = new ArrayList<>();
     private List<MapleStatEffect> pvpEffects = null;
     private List<Integer> animation = null;
     private final List<Pair<String, Integer>> requiredSkill = new ArrayList<>();
     private Element element = Element.NEUTRAL;
-    private int id, animationTime = 0, masterLevel = 0, maxLevel = 0, delay = 0, trueMax = 0, eventTamingMob = 0, skillTamingMob = 0, skillType = 0; //4 is alert
+    private int id, animationTime = 0, masterLevel = 0, maxLevel = 0, delay = 0, trueMax = 0, eventTamingMob = 0, skillTamingMob = 0, skillType = 0, psd = 0, psdSkill = 0; //4 is alert
     private boolean invisible = false, chargeskill = false, timeLimited = false, combatOrders = false, pvpDisabled = false, magic = false, casterMove = false, pushTarget = false, pullTarget = false;
     private int hyper = 0;
 
@@ -55,6 +55,14 @@ public class Skill implements Comparator<Skill> {
         ret.combatOrders = MapleDataTool.getInt("combatOrders", data, 0) > 0;
         ret.hyper = MapleDataTool.getInt("hyper", data, 0);
         ret.masterLevel = MapleDataTool.getInt("masterLevel", data, 0);
+        ret.psd = MapleDataTool.getInt("psd", data, 0);
+        if(ret.psd == 1){
+            final MapleData psdskill = data.getChildByPath("psdSkill");
+            if (psdskill != null)
+            {
+                ret.psdSkill = Integer.parseInt(data.getChildByPath("psdSkill").getChildren().get(0).getName());
+            }
+        }
         if ((id == 22111001 || id == 22140000 || id == 22141002)) {
             ret.masterLevel = 5; //hack
         }
@@ -296,11 +304,14 @@ public class Skill implements Comparator<Skill> {
                 case 51121004:
                 case 51121005:
                 case 60001216:
+                case 61100005:
                 case 60001217:
                 case 61101002:
-                case 61111008:
+                case 61111008://Kaiser mode
                 case 61120007:
-                case 61120008:
+                case 61120008://Kaiser mode
+                case 61121053://Kaiser Hyper Mode
+                case 61121054://Kaiser's Majesty
                 case 61120011:
                 case 80001000:
                 case 80001089:
@@ -323,8 +334,6 @@ public class Skill implements Comparator<Skill> {
                 case 5220014://dice2 cosair
                 case 15001003:
                 case 5111010:
-                
-                //START NOVAK ADDED:
                 case 80001079:
                 case 80001080:
                 case 80001081:
@@ -332,8 +341,43 @@ public class Skill implements Comparator<Skill> {
                 case 1101013:
                 case 36121003:
                 case 33111006:
+                case 35111016: 
                 case 33111007:
-                //END NOVAK ADDED:
+                case 61111004:
+                case 24121054:
+                case 80001155:
+                case 31221054:
+                case 5721054:
+                case 5721052:
+            //    case 27121005:
+                case 27001004: // 익스텐드 마나
+                case 27100003: // 블레스 오브 다크니스
+         //       case 27101202: // 보이드 프레셔
+                case 27111004: // 안티 매직쉘
+                case 27111005: // 라이트쉐도우 가드
+                case 27111006: // 포틱 메디테이션
+          //      case 27110007: // 라이프 타이달
+                case 27121006: // 다크니스 소서리
+                case 27111202: // 녹스피어
+                case 27121202: // 아포칼립스
+                case 27101100: // 실피드 랜서
+                case 27111100: // 스펙트럴 라이트
+                case 27121100: // 라이트 리플렉션
+                case 27111303: // 데스 사이드
+                case 27121303: // 앱솔루트 킬
+                case 27121054: // 메모라이즈
+                case 42101020:
+                case 42101021:
+                case 42101022:
+                case 42101023:
+                case 36121013:
+                case 36121014:
+                case 36121002:
+         //       case 15001022:
+             //   case 1301013:
+                case 1321015:
+                case 20041239:
+                 
                     isBuff = true;
             }
             if (GameConstants.isAngel(id)/* || GameConstants.isSummon(id)*/) {
@@ -345,6 +389,8 @@ public class Skill implements Comparator<Skill> {
         final MapleData level = data.getChildByPath("common");
         if (level != null) {
             ret.maxLevel = MapleDataTool.getInt("maxLevel", level, 1); //10 just a failsafe, shouldn't actually happens
+            ret.psdDamR = MapleDataTool.getString("damR", level, ""); //for the psdSkill tag
+            ret.targetPlus = MapleDataTool.getString("targetPlus", level, "");
             ret.trueMax = ret.maxLevel + (ret.combatOrders ? 2 : 0);
             for (int i = 1; i <= ret.trueMax; i++) {
                 ret.effects.add(MapleStatEffect.loadSkillEffectFromData(level, id, isBuff, i, "x"));
@@ -435,6 +481,20 @@ public class Skill implements Comparator<Skill> {
 
     public boolean hasRequiredSkill() {
         return requiredSkill.size() > 0;
+    }
+    
+        public int getPsdSkill(){
+        return psdSkill;
+    }
+    public int getPsd(){
+        return psd;
+    }
+    public String getPsdDamR(){
+        return psdDamR;
+    }
+    
+    public String getPsdtarget() {
+        return targetPlus;
     }
 
     public List<Pair<String, Integer>> getRequiredSkills() {

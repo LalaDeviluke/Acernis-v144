@@ -56,7 +56,9 @@ import tools.packet.CWvsContext.BuddylistPacket;
 import tools.packet.CWvsContext.GuildPacket;
 import tools.packet.CSPacket;
 import tools.packet.FarmPacket;
+import tools.packet.JobPacket;
 import tools.packet.JobPacket.AvengerPacket;
+import tools.packet.PacketHelper;
 
 public class InterServerHandler {
 
@@ -192,6 +194,8 @@ public class InterServerHandler {
         PlayersHandler.calcHyperSkillPointCount(c);
         c.getSession().write(CSPacket.enableCSUse());
         c.getSession().write(CWvsContext.updateSkills(c.getPlayer().getSkills(), false));//skill to 0 "fix"
+        player.getStolenSkills();
+  //      c.getSession().write(JobPacket.addStolenSkill());
 
         player.getMap().addPlayer(player);
         try {

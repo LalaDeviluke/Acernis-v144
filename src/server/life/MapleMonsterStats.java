@@ -30,9 +30,9 @@ import tools.Pair;
 public class MapleMonsterStats {
 
     private byte cp, selfDestruction_action, tagColor, tagBgColor, rareItemDropLevel, HPDisplayType, summonType, PDRate, MDRate, category;
-    private short level, charismaEXP;
+    private short level, PhysicalDefense, MagicDefense, charismaEXP;
     private long hp;
-    private int id, exp, mp, removeAfter, buffToGive, fixedDamage, selfDestruction_hp, dropItemPeriod, point, eva, acc, PhysicalAttack, MagicAttack, speed, partyBonusR, pushed;
+    private int id, exp, mp, removeAfter, buffToGive, fixedDamage, selfDestruction_hp, dropItemPeriod, point, eva, pad, mad, acc, PhysicalAttack, MagicAttack, speed, partyBonusR, pushed;
     private boolean boss, undead, ffaLoot, firstAttack, isExplosiveReward, mobile, fly, onlyNormalAttack, friendly, noDoom, invincible, partyBonusMob, changeable, escort;
     private String name, mobType;
     private final EnumMap<Element, ElementalEffectiveness> resistance = new EnumMap<>(Element.class);
@@ -113,6 +113,48 @@ public class MapleMonsterStats {
 
     public int getFixedDamage() {
         return fixedDamage;
+    }
+    
+        public boolean isChangeableMob() {
+        return changeable;
+    }
+    
+    public void setChangeableMob(boolean a) {
+        this.changeable = a;
+    }
+    
+       
+    public void setPad(int pad) {
+        this.pad = pad;
+    }
+    
+    public void setMad(int mad) {
+        this.mad = mad;
+    }
+    
+    public int getPad() {
+        return pad;
+    }
+    
+    public int getMad() {
+        return mad;
+    }
+    
+    
+    public void setPhysicalDefense(final short PhysicalDefense) {
+        this.PhysicalDefense = PhysicalDefense;
+    }
+
+    public short getPhysicalDefense() {
+        return PhysicalDefense;
+    }
+
+    public final void setMagicDefense(final short MagicDefense) {
+        this.MagicDefense = MagicDefense;
+    }
+    
+        public final short getMagicDefense() {
+        return MagicDefense;
     }
 
     public void setPushed(int damage) {

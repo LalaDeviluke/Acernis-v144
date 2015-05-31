@@ -50,9 +50,17 @@ public class LoginCrypto {
     private static String hexSha512(final String in) {
         return hashWithDigest(in, "SHA-512");
     }
+    
+    public static String makeSaltedSha1Hash(final String password, final String salt) {
+        return hexSha1(password + salt);
+    }
 
     public static boolean checkSha1Hash(final String hash, final String password) {
         return hash.equals(hexSha1(password));
+    }
+    
+    public static boolean checkSaltedSha1Hash(final String hash, final String password, final String salt) {
+        return hash.equals(makeSaltedSha1Hash(password, salt));
     }
 
     public static boolean checkSaltedSha512Hash(final String hash, final String password, final String salt) {

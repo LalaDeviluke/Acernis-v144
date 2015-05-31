@@ -40,6 +40,7 @@ public enum MapleStatInfo {
     coolTimeR(0), //Reduce Skill cooldown %
     cooltime(0), //Cooldown time
     cr(0), //Critical % 
+    actionSpeed(0),
     criticaldamageMax(0), //Critical Maximum Damage Increase +
     criticaldamageMin(0), //Minimum Critical Damage Increase +
     damR(0), //Damage %
@@ -79,6 +80,7 @@ public enum MapleStatInfo {
     iceGageCon(0), //Ice Gauge Cost
     ignoreMobDamR(0), //Ignore Mob Damage to Player %
     ignoreMobpdpR(0), //Ignore Mob DEF % -> Attack higher
+    indieBDR(0),
     indieAcc(0), //Accuracy +
     indieAllStat(0), //All Stats +
     indieDamR(0), //Damage Increase %
@@ -171,7 +173,7 @@ public enum MapleStatInfo {
     subTime(-1), //Summon Damage Effect time
     suddenDeathR(0), //Instant kill on enemy %
     summonTimeR(0), //Summon Duration + %
-    targetPlus(0), //Increases the number of enemies hit by multi-target skill
+    targetPlus(1), //Increases the number of enemies hit by multi-target skill
     tdR(0), //Increases damage by a set percentage when attacking a tower
     terR(0), //Elemental Resistance %
     time(-1), //bufflength

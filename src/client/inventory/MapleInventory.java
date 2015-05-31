@@ -25,8 +25,8 @@ public class MapleInventory implements Iterable<Item>, Serializable {
     public void addSlot(byte slot) {
         this.slotLimit = ((byte) (this.slotLimit + slot));
 
-        if (this.slotLimit > 24) {
-            this.slotLimit = 24;
+        if (this.slotLimit > 96) {
+            this.slotLimit = 96;
         }
     }
 
@@ -35,8 +35,8 @@ public class MapleInventory implements Iterable<Item>, Serializable {
     }
 
     public void setSlotLimit(byte slot) {
-        if (slot > 24) {
-            slot = 24;
+        if (slot > 96) {
+            slot = 96;
         }
         this.slotLimit = slot;
     }

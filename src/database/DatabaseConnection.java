@@ -32,7 +32,9 @@ import java.util.LinkedList;
  * "singletonices" the connection per process.
  *
  *
- * @author Frz
+ * @author Frz (original method)
+ * @author BlackRabbit (explaining the "too many connections" problem, and showing an example to fix it)
+ * @author Novak (Implementing BlackRabbit's fix in this source's connection)
  */
 public class DatabaseConnection {
 
@@ -82,8 +84,26 @@ public class DatabaseConnection {
      */
     public static final int NO_GENERATED_KEYS = 2;
 
+
+    static {
+        try {
+            Class.forName("com.mysql.jdbc.Driver"); // touch the mysql driver
+        } catch (ClassNotFoundException e) {
+            System.out.println("[SEVERE] SQL Driver Not Found. Consider death by clams.");
+            e.printStackTrace();
+        }
+    }
+
+
     public static Connection getConnection() {
-        return con.get();
+        Connection c = con.get();
+        try {
+            c.getMetaData();
+        } catch (SQLException e) { // connection is dead, therefore discard old object
+            con.remove();
+            c = con.get();
+        }
+        return c;
     }
 
     public static void closeAll() throws SQLException {
@@ -94,23 +114,16 @@ public class DatabaseConnection {
         }
     }
 
-    private static final class ThreadLocalConnection extends ThreadLocal<Connection> {
-
+    private static class ThreadLocalConnection extends ThreadLocal<Connection> {
         public static final Collection<Connection> allConnections = new LinkedList<>();
 
         @Override
-        protected final Connection initialValue() {
+        protected Connection initialValue() {
             try {
-                Class.forName("com.mysql.jdbc.Driver"); // touch the mysql driver
-            } catch (final ClassNotFoundException e) {
-                System.err.println("ERROR" + e);
-            }
-            try {
-                final Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:" + ServerConstants.SQL_PORT + "/" + ServerConstants.SQL_DATABASE + "?autoReconnect=true", ServerConstants.SQL_USER, ServerConstants.SQL_PASSWORD);
-                allConnections.add(con);
-                return con;
+                return DriverManager.getConnection("jdbc:mysql://127.0.0.1:" + ServerConstants.SQL_PORT + "/" + ServerConstants.SQL_DATABASE + "?autoReconnect=true", ServerConstants.SQL_USER, ServerConstants.SQL_PASSWORD);
             } catch (SQLException e) {
-                System.err.println("ERROR" + e);
+                System.out.println("[SEVERE] Unable to make database connection.");
+                e.printStackTrace();
                 return null;
             }
         }

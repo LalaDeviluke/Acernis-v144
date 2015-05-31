@@ -32,6 +32,7 @@ public class DemonBuff extends AbstractBuffClass {
                 31221004, // Overwhelming Power
                 31221008, // MW
                 31121054, // Blue Blood
+                31221054,
         };
     }
     
@@ -65,10 +66,11 @@ public class DemonBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.DIABOLIC_RECOVERY, eff.info.get(MapleStatInfo.x));
                 eff.statups.put(MapleBuffStat.HP_R, eff.info.get(MapleStatInfo.indieMhpR));
                 break;
-           case 31221004: // Overwhelming Power
-                eff.statups.put(MapleBuffStat.DAMAGE_PERCENT, eff.info.get(MapleStatInfo.indieDamR));
-                eff.statups.put(MapleBuffStat.ATTACK_SPEED, eff.info.get(MapleStatInfo.indieBooster));
-                break;
+           case 31221004:
+                    eff.statups.put(MapleBuffStat.DAMAGE_PERCENT, eff.info.get(MapleStatInfo.indieDamR));
+                    eff.statups.put(MapleBuffStat.ATTACK_SPEED, +2);
+          //          eff.statups.put(MapleBuffStat.BOOSTER, 2);
+                    break;
            case 31111004: // Black-Hearted Strength
                 eff.statups.put(MapleBuffStat.ABNORMAL_STATUS_R, eff.info.get(MapleStatInfo.y));
                 eff.statups.put(MapleBuffStat.ELEMENTAL_STATUS_R, eff.info.get(MapleStatInfo.z));
@@ -87,6 +89,8 @@ public class DemonBuff extends AbstractBuffClass {
            case 31121054:
                 eff.statups.put(MapleBuffStat.SHADOWPARTNER, eff.info.get(MapleStatInfo.x));
                 break;
+           case 31221054:
+               eff.statups.put(MapleBuffStat.HP_R, eff.info.get(MapleStatInfo.indieMhpR));
             default:
            //     System.out.println("Unhandled Demon Buff: " + skill);
                 break;

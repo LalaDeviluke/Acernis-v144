@@ -53,7 +53,7 @@ public class WorldConstants {
         Windia(3, 1, 1, 1, (byte) 0, false, false, 20),
         Broa(2, 100, 1000, 3, (byte) 1, false, false, 20, "Fun 100x rates! RBS!"),
         Bera(1, 1, 1, 1, (byte) 1, false, false, 20, "Low, GMS like rates!"),
-        Scania(0, 8, 5, 2, (byte) 3, true, true, 20, "Default world!");
+        Scania(0, 8, 5, 2, (byte) 5, true, true, 20, "Default world!");
         private final int world, exp, meso, drop, channels;
         private final byte flag;
         private final boolean show, available;
@@ -63,7 +63,7 @@ public class WorldConstants {
 
         WorldOption(int world, byte flag, boolean show, int channels) {
             this.world = world;
-            this.exp = (ServerConfig.fixedRates ? ServerConfig.EXP : 8);
+            this.exp = (ServerConfig.fixedRates ? ServerConfig.EXP : 1);
             this.meso = (ServerConfig.fixedRates ? ServerConfig.MESO : 5);
             this.drop = (ServerConfig.fixedRates ? ServerConfig.DROP : 2);
             this.flag = flag;

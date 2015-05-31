@@ -126,7 +126,7 @@ public class MapleSummon extends AnimatedMapleMapObject {
     }
 
     public final boolean isMultiAttack() {
-        return skill == 35111002 || skill == 35121003 || (!isGaviota() && skill != 33101008 && skill < 35000000) || skill == 35111009 || skill == 35111010 || skill == 35111001 || skill == 42111003;
+        return skill == 35111002 || skill == 36121002 || skill == 36121013 || skill == 35121003 || (!isGaviota() && skill != 33101008 && skill < 35000000) || skill == 35111009 || skill == 35111010 || skill == 35111001 || skill == 42111003;
     }
 
     public final boolean isGaviota() {
@@ -134,7 +134,7 @@ public class MapleSummon extends AnimatedMapleMapObject {
     }
 
     public final boolean isBeholder() {
-        return skill == 1321007;
+        return skill == 1301013; // Evil Eye;
     }
 
     public final boolean isMultiSummon() {
@@ -145,6 +145,7 @@ public class MapleSummon extends AnimatedMapleMapObject {
         switch (skill) {
             case 12111004:
             case 1321007: //beholder
+            case 1301013:
             case 2321003:
             case 2121005:
             case 5711001: // turret
@@ -188,6 +189,8 @@ public class MapleSummon extends AnimatedMapleMapObject {
             case 36121002:
             case 36121013:
             case 36121014:
+            case 42101021: // Foxfire
+            case 42121021: // Foxfire
                 return true;
         }
         return isAngel();
@@ -205,11 +208,14 @@ public class MapleSummon extends AnimatedMapleMapObject {
         }
         switch (skill) {
             case 1321007:
+            case 1301013:
+            case 36121014:
                 return 2; //buffs and stuff
             case 35111001: //satellite.
             case 35111009:
             case 35111010:
             case 42111003: // Kishin Shoukan
+            case 36121013:     
                 return 3; //attacks what you attack
             case 35121009: //bots n. tots
                 return 5; //sub summons

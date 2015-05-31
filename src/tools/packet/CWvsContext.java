@@ -3642,7 +3642,7 @@ public class CWvsContext {
             mplew.write(6);
             return mplew.getPacket();
         }
-
+        
         public static byte[] giveBuff(int buffid, int bufflength, Map<MapleBuffStat, Integer> statups, MapleStatEffect effect) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -3650,8 +3650,12 @@ public class CWvsContext {
             PacketHelper.writeBuffMask(mplew, statups);//48
             boolean stacked = false;
             boolean isAura = false;
+            boolean iscombo = false;
             for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
                 isAura = GameConstants.isAuraBuff(stat.getKey());
+                if (stat.getKey() == MapleBuffStat.COMBO) {
+                    iscombo = true;
+                }
                 if (!stat.getKey().canStack()) {
                     boolean specialBuff = GameConstants.isSpecialBuff(stat.getKey());
                     if (specialBuff) {
@@ -3676,6 +3680,7 @@ public class CWvsContext {
                     }
                 }
             }
+
             for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
                 if (stat.getKey().canStack()) {
                     if (!stacked) {
@@ -3686,6 +3691,7 @@ public class CWvsContext {
                         }
                         stacked = true;
                     }
+
 
                     mplew.writeInt(1); //amount of the same buffstat
                     //for each of the same buffstats:
@@ -3703,9 +3709,13 @@ public class CWvsContext {
                 mplew.writeZeroBytes(3);
                 mplew.writeShort(0);
                 mplew.write(0);
-            }        if (buffid == 32001003 || buffid == 32120013 || buffid == 32101003 || buffid == 32120014 || buffid == 32111012 || buffid == 32120015 || buffid == 2221054 || buffid == 36121003 || buffid == 11101022 || buffid == 11111022 || buffid == 2311012 || buffid == 100001263 || buffid == 100001264) {
-            mplew.write(1);
+            }  
+           if (buffid == 2321054) {
+            mplew.writeInt(0);
         }
+            if (buffid == 32110000 || buffid == 32111012 || buffid == 2221054 || buffid == 11101022 || buffid == 11111022 || buffid == 2311012 || buffid == 32001003 || buffid == 32120013 || buffid == 32101003 || buffid == 32120014 || buffid == 32111012 || buffid == 32120015 || buffid == 2221054 || buffid == 36121003 || buffid == 11101022 || buffid == 11111022 || buffid == 2311012 || buffid == 100001263 || buffid == 100001264) {
+            mplew.write(1);
+            }
             if (!isAura) {
                 mplew.writeShort(0);
                 if (effect != null) {
@@ -3719,126 +3729,46 @@ public class CWvsContext {
                 }
             }
             mplew.writeShort(0);
+            if (buffid == 27121005) {
+            mplew.writeInt(effect.getX());
+            }      
+            if (buffid == 15001022 && effect.getY() > 0) {
+            mplew.writeInt(effect.getY());
+            }  
+            //mplew.writeZeroBytes((buffid != 36111003 && buffid != 101120109 && buffid != 27121005) ? 3 : 0); // 197
 
-            mplew.writeZeroBytes(69); //make sure no dc incase not enough length
-
-            //new v142
-            mplew.writeShort(1);
-            mplew.write(0);
-            mplew.write(0);
-            mplew.write(0);
-            //System.err.println("\u001B[34m buff " + mplew.toString());
-            return mplew.getPacket();
-        }
-
-        public static byte[] giveBuff2(int buffid, int bufflength, Map<MapleBuffStat, Integer> statups, MapleStatEffect effect) {
-            MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-            mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
-            PacketHelper.writeBuffMask(mplew, statups);//48
-            boolean stacked = false;
-            boolean isAura = false;
-            boolean isCombo = false;
-            int stackLength = 0;
-            for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
-                if ((stat.getKey()).canStack()) {
-                    if (stat.getKey() != MapleBuffStat.DAMAGE_CAP_INCREASE) {
-                        stackLength++;
-                    }
-                }
+        //       if (buffid == 31011001) {// Overload Release?? idk
+        //          mplew.writeInt(effect.getDuration());
+        //         JobPacket.AvengerPacket.cancelExceed();
+        //        }
+            if (buffid == 31211004) {// Recovery
+                mplew.writeInt(effect.getDuration());
+                JobPacket.AvengerPacket.cancelExceed();
             }
-            for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
-                isAura = GameConstants.isAuraBuff(stat.getKey());
-                if (stat.getKey() == MapleBuffStat.COMBO) {
-                    isCombo = true;
-                }
-                if ((stat.getKey()).canStack()) {
-                    if (!stacked) {
-                        mplew.writeZeroBytes(4);
-                        mplew.write(0);
-                        boolean specialStackBuff = GameConstants.isSpecialStackBuff(stat.getKey());
-                        if (specialStackBuff) {
-                            mplew.writeZeroBytes(1); //not sure where this part comes
-                        }
-                        if (stackLength > 0) {
-                            //mplew.writeInt(stackLength); //stack length
-                        }
-                        stacked = true;
-                    }
-                    //if (stat.getKey() == MapleBuffStat.DAMAGE_CAP_INCREASE) {
-                    mplew.writeInt(1);
-                    //}
-                    mplew.writeInt(buffid);
-                    if (buffid != 23111004) {
-                        mplew.writeInt(bufflength);
-                    }
-                    if (buffid != 11101022) {
-                        mplew.write(1);
-                    }
-                    if (buffid != 11121011) {
-                        mplew.write(1);
-                    }
-                    if (!GameConstants.isValuelessBuff(buffid)) {
-                        if (buffid == 2321005) {//advanced bless
-                            mplew.writeInt(stat.getValue());
-                            mplew.writeInt(240000);
-                        } else {
-                            mplew.writeInt(stat.getValue());
-                            mplew.writeInt(262643804); //unknown 
-                        }
-                    }
-                    if (stat.getKey() == MapleBuffStat.DAMAGE_CAP_INCREASE) {
-                        mplew.writeInt(1000);
-                    }
-                } else {
-                    boolean specialBuff = GameConstants.isSpecialBuff(stat.getKey());
-                    if (specialBuff) {
-                        mplew.writeInt(stat.getValue());
-                    } else {
-                        if (buffid == 61101002 || buffid == 61120007) {
-                            mplew.writeShort(stat.getValue() % 10);
-                        } else {
-                            mplew.writeShort(stat.getValue());
-                        }
-                    }
-                    mplew.writeInt(buffid);
-                    mplew.writeInt(bufflength);
-                }
-                if (buffid == 31011001) {// Overload Release?? idk
-                    mplew.writeInt(effect.getDuration());
-                }
-                if (statups.containsKey(MapleBuffStat.TEMPEST_BLADES)) {
-                    mplew.writeZeroBytes(5);
-                    mplew.writeInt(buffid == 61101002 ? 1 : 2);
-                    mplew.writeInt(buffid == 61101002 ? 3 : 5);
-                    mplew.writeInt(stat.getValue().intValue() / 100); //weapon
-                    mplew.writeInt(buffid == 61101002 ? 3 : 5);
-                    if (buffid == 61120007) {
-                        mplew.writeZeroBytes(8);
-                    }
-                }
-            }
-            if (buffid == 24121004) {// Priere D'Aria
-                mplew.writeZeroBytes(3);
-                mplew.writeShort(0);
+         //   if (buffid == 27111004) {
+         //       mplew.write(0);
+          //      mplew.writeShort(1000);
+          //      mplew.writeShort(0);
+          //  }
+            if (buffid == 27110007) {
                 mplew.write(0);
+                mplew.writeShort(25);
             }
-            if (!isAura) {
-                if (buffid == 23111004) {//ignis roar
-                    mplew.write(0);
-                    mplew.writeShort(750);
-                } else {
-                    mplew.writeShort(0);
-                    if (effect != null) {
-                        if (effect.isDivineShield()) {
-                            mplew.writeInt(effect.getEnhancedWatk());
-                        } else if (effect.getCharColor() > 0) {
-                            mplew.writeInt(effect.getCharColor());
-                        } else if (effect.isInflation()) {
-                            mplew.writeInt(effect.getInflation());
-                        }
-                    }
-                }
+            if (buffid == 27101202) {
+                mplew.writeZeroBytes(10);
+            }
+            if (iscombo) {
+                mplew.writeShort(258);
+                mplew.writeShort(600);
+            } else {
+                mplew.write(0);
+                mplew.write((effect != null) && (effect.isShadow()) ? 1 : 2);
+            }
+            if (isAura) {
+                mplew.writeInt(0);
+            }
+            if ((statups.containsKey(MapleBuffStat.JUMP)) || (statups.containsKey(MapleBuffStat.SPEED)) || (statups.containsKey(MapleBuffStat.MORPH)) || (statups.containsKey(MapleBuffStat.GHOST_MORPH)) /*|| (statups.containsKey(MapleBuffStat.MAPLE_WARRIOR)) || (statups.containsKey(MapleBuffStat.MONSTER_RIDING))*/ || (statups.containsKey(MapleBuffStat.DASH_SPEED)) || (statups.containsKey(MapleBuffStat.DASH_JUMP)) || (statups.containsKey(MapleBuffStat.SOARING)) || (statups.containsKey(MapleBuffStat.YELLOW_AURA)) || (statups.containsKey(MapleBuffStat.SNATCH)) || (statups.containsKey(MapleBuffStat.INDIE_SPEED)) || (statups.containsKey(MapleBuffStat.ANGEL_JUMP)) || (statups.containsKey(MapleBuffStat.ENERGY_CHARGE))/* || (statups.containsKey(MapleBuffStat.MECH_CHANGE))*/) {
+                mplew.write(4);
             }
             if (buffid == 23111004) {//ignis roar
                 mplew.write(0);
@@ -3847,45 +3777,24 @@ public class CWvsContext {
                 mplew.writeShort(0);
 
             }
-
             if (statups.containsKey(MapleBuffStat.MAPLE_WARRIOR)) {
                 mplew.write(HexTool.getByteArrayFromHexString("00 E8 03 00 00 00 13 00 00 00 00"));
                 return mplew.getPacket();
             }
-
-            if (statups.containsKey(MapleBuffStat.TEMPEST_BLADES)) { //this too
-                mplew.writeShort(0);
-            }
             if (statups.containsKey(MapleBuffStat.KAISER_COMBO)) { //this too
                 mplew.writeZeroBytes(8);
             }
-
-            if (true) { //this part doesnt always come
-                if (buffid != 23111004) {//ignis roar 
-                    mplew.writeShort(0);
-                }
-                mplew.write(0);
-                mplew.write(0);
-                if (buffid == 2311007 || buffid == 2111007 || buffid == 2211007 || buffid == 23111004 || buffid == 1201007) {//teleport mastery
-                    mplew.write(1);
-                } else {
-                    mplew.write(effect != null && effect.isShadow());
-                }
-                if (isAura || statups.containsKey(MapleBuffStat.TEMPEST_BLADES)) {
-                    mplew.writeInt(0);
-                }
-            }
-
+            mplew.writeZeroBytes(69); //make sure no dc incase not enough length
+            
             //new v142
-            mplew.writeShort(0);
+            mplew.writeShort(1);
             mplew.write(0);
             mplew.write(0);
             mplew.write(0);
-            mplew.writeZeroBytes(30);
-//            System.err.println("\u001B[34m buff " + mplew.toString());
+            System.err.println("sent Buff with buffid: " + buffid +"  as packet: "+ mplew.toString());
             return mplew.getPacket();
         }
-
+        
         public static byte[] giveDebuff(MapleDisease statups, int x, int skillid, int level, int duration) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -3969,29 +3878,7 @@ public class CWvsContext {
 
             return mplew.getPacket();
         }
-
-//public static byte[] giveForeignBuff(int cid, Map<MapleBuffStat, Integer> statups, MapleStatEffect effect) {
-        //MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-// mplew.writeShort(SendPacketOpcode.GIVE_FOREIGN_BUFF.getValue());
-        //mplew.writeInt(cid);
-// PacketHelper.writeBuffMask(mplew, statups);
-        //for (Map.Entry statup : statups.entrySet()) {
-// if ((statup.getKey() == MapleBuffStat.SHADOWPARTNER) || (statup.getKey() == MapleBuffStat.MECH_CHANGE) || (statup.getKey() == MapleBuffStat.DARK_AURA) || (statup.getKey() == MapleBuffStat.YELLOW_AURA) || (statup.getKey() == MapleBuffStat.BLUE_AURA) || (statup.getKey() == MapleBuffStat.GIANT_POTION) || (statup.getKey() == MapleBuffStat.SPIRIT_LINK) || (statup.getKey() == MapleBuffStat.PYRAMID_PQ) || (statup.getKey() == MapleBuffStat.WK_CHARGE) || (statup.getKey() == MapleBuffStat.SPIRIT_SURGE) || (statup.getKey() == MapleBuffStat.MORPH) || (statup.getKey() == MapleBuffStat.DARK_METAMORPHOSIS)) {
-        //mplew.writeShort(((Integer)statup.getValue()).shortValue());
-        //mplew.writeInt(effect.isSkill() ? effect.getSourceId() : -effect.getSourceId());
-// } else if (statup.getKey() == MapleBuffStat.FAMILIAR_SHADOW) {
-// mplew.writeInt(((Integer)statup.getValue()).intValue());
-/// mplew.writeInt(effect.getCharColor());
-// } else {
-        //mplew.writeShort(((Integer)statup.getValue()).shortValue());
-// }
-// /}
-// mplew.writeShort(0);
-        //mplew.writeShort(0);
-        //mplew.write(1);
-        //mplew.write(1);
-        //return mplew.getPacket();
-// }
+        
         public static byte[] giveAriaBuff(Map<MapleBuffStat, Integer> statups, int bufflevel, int buffid, int bufflength) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -4009,40 +3896,6 @@ public class CWvsContext {
             mplew.writeShort(0);
             return mplew.getPacket();
         }
-
-     /*   public static byte[] giveForeignBuff(int cid, Map<MapleBuffStat, Integer> statups, MapleStatEffect effect) {
-            MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-            mplew.writeShort(SendPacketOpcode.GIVE_FOREIGN_BUFF.getValue());
-            mplew.writeInt(cid);
-
-            PacketHelper.writeBuffMask(mplew, statups);
-            for (Entry<MapleBuffStat, Integer> statup : statups.entrySet()) {
-                if (statup.getKey() == MapleBuffStat.SHADOWPARTNER || statup.getKey() == MapleBuffStat.MECH_CHANGE || statup.getKey() == MapleBuffStat.DARK_AURA || statup.getKey() == MapleBuffStat.YELLOW_AURA || statup.getKey() == MapleBuffStat.BLUE_AURA || statup.getKey() == MapleBuffStat.GIANT_POTION || statup.getKey() == MapleBuffStat.SPIRIT_LINK || statup.getKey() == MapleBuffStat.PYRAMID_PQ || statup.getKey() == MapleBuffStat.WK_CHARGE || statup.getKey() == MapleBuffStat.DAMAGE_R || statup.getKey() == MapleBuffStat.MORPH || statup.getKey() == MapleBuffStat.WATER_SHIELD || statup.getKey() == MapleBuffStat.DARK_METAMORPHOSIS) {
-                    mplew.writeShort(statup.getValue().shortValue());
-                    mplew.writeInt(effect.isSkill() ? effect.getSourceId() : -effect.getSourceId());
-                } else if (statup.getKey() == MapleBuffStat.FAMILIAR_SHADOW) {
-                    mplew.writeInt(statup.getValue());
-                    mplew.writeInt(effect.getCharColor());
-                } else {
-                    mplew.writeShort(statup.getValue().shortValue());
-                }
-            }
-            mplew.writeShort(1);
-            mplew.write(0);
-            mplew.writeInt(2);
-            mplew.writeZeroBytes(13);
-            mplew.writeShort(600);
-
-            mplew.writeZeroBytes(20);
-            //
-             mplew.writeShort(0);
-             mplew.writeShort(0);
-             mplew.write(1);
-             mplew.write(1);
-             mplew.write(0);v140
-            return mplew.getPacket();
-        }*/
         
      public static byte[] giveForeignBuff(int cid, Map<MapleBuffStat, Integer> statups, MapleStatEffect effect) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
@@ -4060,7 +3913,7 @@ public class CWvsContext {
                     mplew.writeShort(statup.getValue().shortValue());
                 }
             }
-        mplew.writeShort(0);
+        mplew.writeShort(1);//was 0, ourstory does 1?
         mplew.write(0);
         if (effect.getSourceId() == 13101024) {
             mplew.writeLong(0);
@@ -4088,10 +3941,14 @@ public class CWvsContext {
             mplew.write(0);
             mplew.writeShort(23);
             mplew.writeShort(0);
-        } else if (effect.getSourceId() == 61120008 || effect.getSourceId() == 61111008) {
+        } else if (effect.getSourceId() == 61120008 || effect.getSourceId() == 61111008 || effect.getSourceId() == 61121053) {// KAISER BUFFS!
+           /* mplew.writeLong(0); // old kaiser
             mplew.writeLong(0);
-            mplew.writeLong(0);
-            mplew.writeZeroBytes(5);
+            mplew.writeZeroBytes(5);*/
+            mplew.writeInt(2);
+            mplew.writeZeroBytes(13);
+            mplew.writeShort(600);
+            mplew.writeZeroBytes(20);//ourstory method
         } else if (effect.getSourceId() == 21101006) {
             mplew.writeShort(0);
             mplew.write(7);
@@ -4099,10 +3956,10 @@ public class CWvsContext {
             mplew.writeLong(0);
             mplew.write(208);
             mplew.write(2);
-        } else if (effect.getSourceId() == 3101004 || effect.getSourceId() == 3201004 || effect.getSourceId() == 13101003 || effect.getSourceId() == 33101003) {
+        }/* else if (effect.getSourceId() == 3101004 || effect.getSourceId() == 3201004 || effect.getSourceId() == 13101003 || effect.getSourceId() == 33101003) {
             mplew.writeLong(0);
             mplew.writeLong(0);
-        } else if (effect.getSourceId() == 30001001 || effect.getSourceId() == 30011001 || effect.getSourceId() == 2311009) {
+        }*/ else if (effect.getSourceId() == 30001001 || effect.getSourceId() == 30011001 || effect.getSourceId() == 2311009) {
             mplew.writeLong(0);
             mplew.writeLong(0);
             mplew.write(0);
@@ -4121,7 +3978,7 @@ public class CWvsContext {
             mplew.writeLong(0);
             mplew.writeZeroBytes(6);
         }
-        System.out.println("lelelel"+effect.getSourceId()+"lelelelelelele"+mplew.toString());
+        System.out.println("Sent foreign Efftect: "+effect.getSourceId()+" as packet: "+mplew.toString());
         return mplew.getPacket();
     }
 

@@ -621,8 +621,15 @@ public class MapleClient implements Serializable {
                         } else if (salt == null && LoginCrypto.checkSha1Hash(passhash, pwd)) {
                             loginok = 0;
                             updatePasswordHash = true;
-                        } else if (LoginCrypto.checkSaltedSha512Hash(passhash, pwd, salt)) {
+                        } else if (salt != null && LoginCrypto.checkSaltedSha1Hash(passhash, pwd, salt)) {
+                            loginok = 0; //new standard
+                        } else if (salt != null && LoginCrypto.checkSaltedSha512Hash(passhash, pwd, salt)) {
+                            updatePasswordHash = true; //migrates away from Sha512, higher bit count but incompatible
                             loginok = 0;
+                    /*    Take out to reflect salted SHA1 Redirector
+                        Java's SHA512 implementation is incompatible
+                        Enable only if you know what you're doing
+                    */        
                         } else {
                             loggedIn = false;
                             loginok = 4;
@@ -630,7 +637,7 @@ public class MapleClient implements Serializable {
                         if (updatePasswordHash) {
                             try (PreparedStatement pss = con.prepareStatement("UPDATE `accounts` SET `password` = ?, `salt` = ? WHERE id = ?")) {
                                 final String newSalt = LoginCrypto.makeSalt();
-                                pss.setString(1, LoginCrypto.makeSaltedSha512Hash(pwd, newSalt));
+                                pss.setString(1, LoginCrypto.makeSaltedSha1Hash(pwd, newSalt));
                                 pss.setString(2, newSalt);
                                 pss.setInt(3, accId);
                                 pss.executeUpdate();
@@ -1331,9 +1338,9 @@ public class MapleClient implements Serializable {
     }
 
     public int getCharacterSlots() {
-        if (isGm()) {
-            return 24;
-        }
+   //     if (isGm()) {
+  //          return 24;
+   //     }
         if (charslots != DEFAULT_CHARSLOT) {
             return charslots; //save a sql
         }

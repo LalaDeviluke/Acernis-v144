@@ -84,6 +84,7 @@ public abstract class AbstractPlayerInteraction {
     public final MapleCharacter getPlayer() {
         return c.getPlayer();
     }
+    
 
     public final EventManager getEventManager(final String event) {
         return c.getChannelServer().getEventSM().getEventManager(event);
@@ -96,6 +97,7 @@ public abstract class AbstractPlayerInteraction {
     public final void openNpc(int npc, String filename) {
         NPCScriptManager.getInstance().start(c, npc, filename);
     }
+    
 
     public final void openNpc(MapleClient client, int npc, String filename) {
         NPCScriptManager.getInstance().start(client, npc, filename);
@@ -268,6 +270,8 @@ public abstract class AbstractPlayerInteraction {
     public final void addHP(final int delta) {
         c.getPlayer().addHP(delta);
     }
+    
+    
 
     public final int getPlayerStat(final String type) {
         switch (type) {

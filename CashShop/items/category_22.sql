@@ -1,0 +1,5 @@
+/* Dumping data for table `cashshop_items` */
+INSERT INTO cashshop_items (`category`, `subcategory`, `parent`, `image`, `sn`, `itemId`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES ('1000000', '1050700', '1050700', '', '50400018', '5251016', '0', '2000', '2000', '1', '90', '2', '79');
+INSERT INTO cashshop_items (`category`, `subcategory`, `parent`, `image`, `sn`, `itemId`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES ('1000000', '1050700', '1050700', '', '50400015', '5251004', '0', '12500', '12500', '1', '90', '2', '98');
+INSERT INTO cashshop_items (`category`, `subcategory`, `parent`, `image`, `sn`, `itemId`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES ('1000000', '1050700', '1050700', '', '50400016', '5251005', '0', '20000', '20000', '1', '90', '2', '63');
+INSERT INTO cashshop_items (`category`, `subcategory`, `parent`, `image`, `sn`, `itemId`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES ('1000000', '1050700', '1050700', '', '50400017', '5251006', '0', '25000', '25000', '1', '90', '2', '145');

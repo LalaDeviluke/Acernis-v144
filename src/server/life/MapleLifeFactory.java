@@ -174,7 +174,7 @@ public class MapleLifeFactory {
                 stats.setName(MapleDataTool.getString("name", mobStringData.getChildByPath(String.valueOf(mid)), "MISSINGNO"));
             }
             stats.setBuffToGive(MapleDataTool.getIntConvert("buff", monsterInfoData, -1));
-            stats.setChange(MapleDataTool.getIntConvert("changeableMob", monsterInfoData, 0) > 0);
+            stats.setChangeableMob(MapleDataTool.getIntConvert("changeableMob", monsterInfoData, 0) == 1);
             stats.setFriendly(MapleDataTool.getIntConvert("damagedByMob", monsterInfoData, 0) > 0);
             stats.setNoDoom(MapleDataTool.getIntConvert("noDoom", monsterInfoData, 0) > 0);
             stats.setFfaLoot(MapleDataTool.getIntConvert("publicReward", monsterInfoData, 0) > 0);

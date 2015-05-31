@@ -36,13 +36,14 @@ import tools.packet.JobPacket;
 public class PlayerStats implements Serializable {
 
     private static final long serialVersionUID = -679541993413738569L;
+    private List<Triple<Integer, String, Integer>> psdSkills = new ArrayList<>();
     private final Map<Integer, Integer> setHandling = new HashMap<>(), skillsIncrement = new HashMap<>(), damageIncrease = new HashMap<>();
     private final EnumMap<Element, Integer> elemBoosts = new EnumMap<>(Element.class);
     private final List<Equip> durabilityHandling = new ArrayList<>(), equipLevelHandling = new ArrayList<>();
     private transient float shouldHealHP, shouldHealMP;
     private transient short passive_sharpeye_min_percent, passive_sharpeye_percent, crit_rate;
     private transient byte passive_mastery;
-    private transient int localstr, localdex, localluk, localint_, localmaxhp, localmaxmp, magic, watk, hands, accuracy;
+    public transient int localstr, localdex, localluk, localint_, localmaxhp, localmaxmp, magic, watk, hands, accuracy, targetPlus;
     private transient float localmaxbasedamage, localmaxbasepvpdamage, localmaxbasepvpdamageL;
     public transient boolean equippedWelcomeBackRing, hasClone, Berserk;
     public transient double expBuff, dropBuff, mesoBuff, cashBuff, mesoGuard, mesoGuardMeso, expMod, dropMod, pickupRange, dam_r, bossdam_r;
@@ -83,6 +84,7 @@ public class PlayerStats implements Serializable {
         percent_mdef = 0;
         percent_hp = 0;
         percent_mp = 0;
+        targetPlus = 0;
         percent_str = 0;
         percent_dex = 0;
         percent_int = 0;
@@ -132,6 +134,7 @@ public class PlayerStats implements Serializable {
         ignoreDAM = 0;
         ignoreDAM_rate = 0;
         ignoreTargetDEF = 0;
+        targetPlus = 0;
         hpRecover = 0;
         hpRecoverProp = 0;
         hpRecoverPercent = 0;
@@ -351,6 +354,7 @@ public class PlayerStats implements Serializable {
                         localmaxmp_ += se.incMMP;
                         percent_hp += se.incMHPr;
                         percent_mp += se.incMMPr;
+                        
                         wdef += se.incPDD;
                         mdef += se.incMDD;
                         if (se.option1 > 0 && se.option1Level > 0) {
@@ -597,6 +601,10 @@ public class PlayerStats implements Serializable {
             chra.updatePartyMemberHP();
         }
     }
+    
+        public List<Triple<Integer, String, Integer>> getPsdSkills(){
+        return psdSkills;
+    }
 
     private void handlePassiveSkills(MapleCharacter chra) {
         Skill bx;
@@ -609,6 +617,18 @@ public class PlayerStats implements Serializable {
                 eff = bx.getEffect(bof);
                 percent_hp += eff.getX();
                 percent_mp += eff.getX();
+            }
+        }
+        
+                psdSkills.clear();
+        for(Skill sk : chra.getSkills().keySet()){
+            if(sk.getPsd() == 1){
+                Triple<Integer, String, Integer> psdSkill = new Triple<>(0, "", 0);
+                psdSkill.left = sk.getPsdSkill();
+                psdSkill.mid = sk.getPsdDamR(); //This only handles damage increases; some skills have effects other than that, so TODO
+                psdSkill.mid = sk.getPsdtarget();
+                psdSkill.right = sk.getId();
+                psdSkills.add(psdSkill);
             }
         }
         switch (chra.getJob()) {
@@ -891,7 +911,79 @@ public class PlayerStats implements Serializable {
                     hpRecoverPercent += eff.getX();
                     hpRecoverProp += eff.getProb(); //yes
                 }
+                                bx = SkillFactory.getSkill(31110009);
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    eff = bx.getEffect(bof);
+                    localmaxmp += eff.getMaxDemonFury(); //yes
+                }
                 break;
+            case 3002:
+            case 3600:
+            case 3610:
+            case 3611:
+            case 3612:
+                {
+                bx = SkillFactory.getSkill(30020234); //Lateral 1
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += bx.getEffect(bof).getPercentHP();
+                }
+                 bx = SkillFactory.getSkill(36000004); //Lateral 2
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += bx.getEffect(bof).getZ();
+                    percent_mp += bx.getEffect(bof).getS();
+                }
+                                 bx = SkillFactory.getSkill(36100007); //Lateral 3
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += bx.getEffect(bof).getS();
+                    percent_mp += bx.getEffect(bof).getS();
+                }
+               bx = SkillFactory.getSkill(36110007); //Lateral 4
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += bx.getEffect(bof).getS();
+                    percent_mp += bx.getEffect(bof).getS();
+                }
+                               bx = SkillFactory.getSkill(36120010); //Lateral 5
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += bx.getEffect(bof).getS();
+                    percent_mp += bx.getEffect(bof).getS();
+                }
+                  bx = SkillFactory.getSkill(36120045); //Lateral 5
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    targetPlus += bx.getEffect(bof).gettargetPlus();
+                }
+                break;
+            }
+            case 6000:
+            case 6100:
+            case 6110:
+            case 6111:
+            case 6112:
+                {
+                 bx = SkillFactory.getSkill(61100007); //Inner Blaze
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += bx.getEffect(bof).getPercentHP();
+                }
+               bx = SkillFactory.getSkill(61110007); //Adv Inner Blade
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += bx.getEffect(bof).getPercentHP();
+                }
+                               bx = SkillFactory.getSkill(60000222); //Iron Will
+                bof = chra.getTotalSkillLevel(bx);
+                if (bof > 0) {
+                    percent_hp += bx.getEffect(bof).getPercentHP();
+                }
+                        
+                break;
+            }
             case 510:
             case 511:
             case 512: {
@@ -1833,8 +1925,8 @@ public class PlayerStats implements Serializable {
                 if (bof > 0) { //Satellite
                     eff = bx.getEffect(bof);
                     damageIncrease.put(35111001, (int) eff.getDAMRate());
-                    damageIncrease.put(35111009, (int) eff.getDAMRate());
-                    damageIncrease.put(35111010, (int) eff.getDAMRate());
+                 //   damageIncrease.put(35111009, (int) eff.getDAMRate());
+                 //   damageIncrease.put(35111010, (int) eff.getDAMRate());
                 }
                 bx = SkillFactory.getSkill(35120001);
                 bof = chra.getTotalSkillLevel(bx);
@@ -2173,6 +2265,14 @@ public class PlayerStats implements Serializable {
         buff = chra.getBuffedValue(MapleBuffStat.HP_BOOST_PERCENT);
         if (buff != null) {
             percent_hp += buff.intValue();
+        }
+                buff = chra.getBuffedValue(MapleBuffStat.HAYATO3);
+        if (buff != null) {
+            percent_hp += buff.intValue();
+        }
+                        buff = chra.getBuffedValue(MapleBuffStat.HAYATO3);
+        if (buff != null) {
+            percent_mp += buff.intValue();
         }
         buff = chra.getBuffedValue(MapleBuffStat.MP_BOOST_PERCENT);
         if (buff != null) {
@@ -3563,6 +3663,7 @@ public class PlayerStats implements Serializable {
         this.maxhp = hp;
         recalcLocalStats(chra);
     }
+    
 
     public final void setMaxMp(final int mp, MapleCharacter chra) {
         this.maxmp = mp;
@@ -3632,4 +3733,5 @@ public class PlayerStats implements Serializable {
     public final boolean isRangedJob(final int job) {
         return GameConstants.isJett(job) || GameConstants.isMercedes(job) || GameConstants.isCannon(job) || job == 400 || (job / 10 == 52) || (job / 100 == 3) || (job / 100 == 13) || (job / 100 == 14) || (job / 100 == 33) || (job / 100 == 35) || (job / 10 == 41);
     }
+
 }

@@ -38,7 +38,8 @@ import server.Timer.EtcTimer;
 import server.Timer.EventTimer;
 import server.Timer.MapTimer;
 import server.Timer.WorldTimer;
-import server.commands.InternCommand.Ban;
+import server.commands.GMCommand.Ban;
+import server.commands.GMCommand.TempBan;
 import server.life.*;
 import server.maps.*;
 import server.quest.MapleQuest;
@@ -1494,6 +1495,7 @@ public class SuperGMCommand {
             return 1;
         }
     }
+    
 
     public static class SetSendOp extends CommandExecute {
 

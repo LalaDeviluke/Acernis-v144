@@ -216,6 +216,7 @@ public class StatsHandling {
         if (slea.available() < 16L) {
             return;
         }
+       // final int count = slea.readInt();
         int PrimaryStat = GameConstants.GMS ? (int) slea.readLong() : slea.readInt();
         int amount = slea.readInt();
         int SecondaryStat = GameConstants.GMS ? (int) slea.readLong() : slea.readInt();
@@ -259,6 +260,15 @@ public class StatsHandling {
                     playerst.setLuk((short) (playerst.getLuk() + amount), chr);
                     statupdate.put(MapleStat.LUK, Long.valueOf(playerst.getLuk()));
                     break;
+                   case 1024: //Max Hp
+                       System.out.println("Reading hp case."); 
+                   if (playerst.getMaxHp() + (amount * 30) > 500000) {
+                            return;
+                        }
+                        System.out.println("HP Didn't get added Sorry nigger."); 
+                        playerst.setMaxHp((short) (playerst.getMaxHp() + amount * 30), chr);
+                        statupdate.put(MapleStat.MAXHP, Long.valueOf(playerst.getMaxHp()));
+                        break;
                 default:
                     c.getSession().write(CWvsContext.enableActions());
                     return;
@@ -292,6 +302,14 @@ public class StatsHandling {
                     playerst.setLuk((short) (playerst.getLuk() + amount2), chr);
                     statupdate.put(MapleStat.LUK, Long.valueOf(playerst.getLuk()));
                     break;
+               case 1024: //Max Hp
+                   if (playerst.getMaxHp() + (amount2 * 30) > 500000) {
+                            return;
+                   }
+                     System.out.println("HP Didn't get added Sorry nigger.");       
+                        playerst.setMaxHp((short) (playerst.getMaxHp() + amount2 * 30), chr);
+                        statupdate.put(MapleStat.MAXHP, Long.valueOf(playerst.getMaxHp()));
+                        break;
                 default:
                     c.getSession().write(CWvsContext.enableActions());
                     return;

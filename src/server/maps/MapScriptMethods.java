@@ -178,6 +178,7 @@ public class MapScriptMethods {
         enter_101070000,
         evolvingDirection1,
         evolvingDirection2,
+        evolvingDirection3,
         np_tuto_0_0_before,
         np_tuto_0_0,
         enter_931060110,
@@ -383,6 +384,7 @@ public class MapScriptMethods {
         sao_enter18,
         sao_enter19,
         sao_enter20,
+        lightning_tuto_1_0,
         NULL;
 
         private static onUserEnter fromString(String Str) {
@@ -1606,6 +1608,24 @@ public class MapScriptMethods {
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().start(c, 9075004, "TutEvolving2");
                 break;
+            }            case evolvingDirection3: {
+                   try {
+                    MapleQuest.getInstance(1801).forceComplete(c.getPlayer(), 0);
+                    c.getPlayer().getMap().resetFully();
+                 //   c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                //    c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                    c.getSession().write(CField.MapEff("evolving/swoo2"));
+                    Thread.sleep(4000);
+                    showIntro(c, "Effect/Direction5.img/evolvingDereciton/Scene0");
+                    Thread.sleep(8000);
+                 //   c.getSession().write(CField.UIPacket.IntroEnableUI(0));
+                  //  c.getSession().write(CField.UIPacket.IntroDisableUI(false));
+                    c.getPlayer().changeMap(310010000, 0);
+                    c.getPlayer().changeMap(310010000, 0);
+                   }   catch (InterruptedException ex) {
+                }
+                   NPCScriptManager.getInstance().dispose(c);
+                break;
             }
 
             case enter_931060110: {
@@ -2181,7 +2201,7 @@ public class MapScriptMethods {
                 break;
             }
 
-            case dubl2Tuto0: {
+         /*   case dubl2Tuto0: {
                 try {
                     c.getPlayer().getMap().resetFully();
                     c.getSession().write(NPCPacket.getCutSceneSkip());
@@ -2202,6 +2222,11 @@ public class MapScriptMethods {
                 }, 13000);
                 break;
             }
+            */
+            
+            
+            
+            
             case dubl2Tuto10: {
                 c.getSession().write(CWvsContext.getTopMsg("The Secret Garden Depths"));
                 c.getSession().write(CWvsContext.getTopMsg("On a rainy day..."));
@@ -2219,7 +2244,7 @@ public class MapScriptMethods {
             }
 
             case dublTuto23: {
-                c.getSession().write(CWvsContext.getTopMsg("Defeat Mano to complete the Quest!"));
+                c.getSession().write(CWvsContext.getTopMsg("Defeat to Mano to complete Quest"));
                 c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300523), new Point(-283, 152));
             break;
             }
@@ -2269,6 +2294,38 @@ public class MapScriptMethods {
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().start(c, 9270083, "np_tuto_0_1");
+                break;
+            }
+                        case lightning_tuto_1_0: {
+                try {
+
+                    c.getPlayer().getMap().resetFully();
+                    c.getSession().write(NPCPacket.getCutSceneSkip());
+                    Thread.sleep(12000);
+                } catch (InterruptedException e) {
+                }
+                c.getSession().write(CField.UIPacket.getDirectionStatus(false));
+          //      c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+          //      c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                try {
+                    Thread.sleep(2000);
+            //        c.getSession().write(UIPacket.getDirectionInfo("Effect/DirectionNewPirate.img/newPirate/balloonMsg2/0", 0, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                    Thread.sleep(2000);
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    Thread.sleep(1000);
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                  //  Thread.sleep(1000);
+                  //  c.getSession().write(CField.UIPacket.DublStartAutoMove());
+                } catch (InterruptedException ex) {
+                }
+                NPCScriptManager.getInstance().dispose(c);
+                c.removeClickedNPC();
+                NPCScriptManager.getInstance().start(c, 2159353, "Lumi_tut1");
                 break;
             }
             case map_913070000: {

@@ -592,7 +592,7 @@ public class CSPacket {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.CS_OPERATION.getValue());
-        mplew.write(Operation_Code + (packages ? 73 : 24)); // 74 = Similar structure to showBoughtCSItemFailed
+        mplew.write(Operation_Code + (packages ? 74 : 25)); // 74 = Similar structure to showBoughtCSItemFailed
         mplew.writeMapleAsciiString(receiver);
         mplew.writeInt(itemid);
         mplew.writeShort(quantity);

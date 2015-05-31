@@ -30,6 +30,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MapleRing;
 import constants.GameConstants;
 import handling.world.MaplePartyCharacter;
+import handling.world.World;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
@@ -55,6 +56,7 @@ import scripting.EventManager;
 import scripting.ReactorScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
+import server.MaplePortal;
 import server.MapleStatEffect;
 import server.Randomizer;
 import server.events.MapleCoconut;
@@ -64,6 +66,7 @@ import server.life.MapleMonsterInformationProvider;
 import server.life.MonsterDropEntry;
 import server.life.MonsterGlobalDropEntry;
 import server.maps.MapleDoor;
+import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMist;
 import server.maps.MapleReactor;
@@ -79,6 +82,7 @@ import tools.data.LittleEndianAccessor;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import tools.packet.CWvsContext.Reward;
+import tools.packet.EvolvingPacket;
 import tools.packet.JobPacket;
 
 public class PlayersHandler {
@@ -263,6 +267,47 @@ public class PlayersHandler {
             }
         }
     }
+    
+    
+        public static void startEvo(LittleEndianAccessor slea, MapleCharacter player, MapleClient c) {
+        
+   /*     final List<Integer> maps = new ArrayList<>();
+        switch (mapid) {
+            case 0:
+                maps.add(960010100);
+                maps.add(960010101);
+                maps.add(960010102);
+                break;
+            case 1:
+                maps.add(960020100);
+                maps.add(960020101);
+                maps.add(960020102);
+                maps.add(960020103);
+                break;
+            case 2:
+                maps.add(960030100);
+                break;
+            case 3:
+                maps.add(689000000);
+                maps.add(689000010);
+                break;
+            default:
+                
+        }     */
+      //  player.getClient().getChannelServer().getEventSM().getEventManager("EvolutionLab"); //Coming Soon
+        final EventManager em = c.getChannelServer().getEventSM().getEventManager("EvolutionLab");
+        MapleMap map = player.getClient().getChannelServer().getMapFactory().getMap(957010000);
+        MaplePortal portal = map.getPortal("sp");
+       // eim.startEventTimer(4500000);
+        player.changeEvolvingMap(map, portal, "Bgm25/CygnusGarden", 957030000);
+        final EventInstanceManager eim = em.getInstance(("EvolutionLab"));
+                eim.registerPlayer(c.getPlayer());
+                eim.startEventTimer(4500000);
+
+     //   player.getClient().getChannelServer().getMapFactory().getMap(map).broadcastMessage(CField.getClock(20));
+     //   EventManager.startEventTimer(4500000L);
+    }
+        
 
     public static void hitCoconut(LittleEndianAccessor slea, MapleClient c) {
         /*CB 00 A6 00 06 01
@@ -732,6 +777,7 @@ public class PlayersHandler {
 
     public static void LinkSkill(final LittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         //slea: [76 7F 31 01] [35 00 00 00]
+         c.getPlayer().dropMessage(1, "Beginning link skill.");
         int skill = slea.readInt();
         int cid = slea.readInt();
         boolean found = false;
@@ -1351,7 +1397,7 @@ public class PlayersHandler {
                 if ((skillid != 35111004 && skillid != 35121013) || chr.getBuffSource(MapleBuffStat.MECH_CHANGE) != skillid) { // Battleship
                     c.getSession().write(CField.skillCooldown(skillid, effect.getCooldown(chr)));
                     chr.addCooldown(skillid, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
-                }
+                }     
             }
             switch (chr.getJob()) {
                 case 111:

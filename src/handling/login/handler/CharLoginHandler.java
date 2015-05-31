@@ -366,6 +366,14 @@ public class CharLoginHandler {
         if (job == JobType.AngelicBuster) {
             newchar.setSecondFace(21173);
             newchar.setSecondHair(37141);
+            newchar.setLevel((short) 10);
+            newchar.getStat().int_ = 4;
+            newchar.getStat().dex = 57;
+            newchar.getStat().maxhp = 1500;
+            newchar.getStat().hp = 1500;
+            newchar.getStat().maxmp = 1500;
+            newchar.getStat().mp = 1500;        
+            newchar.setRemainingSp(3);
         } else if (job == JobType.Zero) {
             newchar.setSecondFace(21290);
             newchar.setSecondHair(37623);

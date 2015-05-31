@@ -133,6 +133,15 @@ public class MagicianBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.DAMAGE_PERCENT, eff.info.get(MapleStatInfo.indieDamR));
                 eff.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, eff.info.get(MapleStatInfo.indieMaxDamageOver));
                 break;
+         //   case 2121054:
+        //        eff.statups.put(MapleBuffStat.FIRE_AURA, eff.info.get(MapleStatInfo.x));
+            case 2321054: //Righteously Indignant
+                eff.statups.put(MapleBuffStat.ANGEL, 1);
+                eff.statups.put(MapleBuffStat.IGNORE_DEF, eff.info.get(MapleStatInfo.ignoreMobpdpR));
+                eff.statups.put(MapleBuffStat.ATTACK_SPEED, eff.info.get(MapleStatInfo.indieBooster));
+                eff.statups.put(MapleBuffStat.INDIE_MAD, eff.info.get(MapleStatInfo.indieMad));
+                eff.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, eff.info.get(MapleStatInfo.indieMaxDamageOver));
+                break;
             default:
                 //System.out.println("Magician skill not coded: " + skill);
                 break;

@@ -20,6 +20,7 @@
  */
 package handling;
 
+import client.MapleCharacter;
 import handling.farm.handler.FarmHandler;
 import client.MapleClient;
 import client.inventory.Item;
@@ -83,6 +84,8 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
     //private static final ReentrantReadWriteLock IPLoggingLock = new ReentrantReadWriteLock();
     private static final String nl = System.getProperty("line.separator");
     private static final HashMap<String, FileWriter> logIPMap = new HashMap<>();
+    private static String client_username;
+    private static String client_password;
     //Note to Zero: Use an enumset. Don't iterate through an array.
     private static final EnumSet<RecvPacketOpcode> blocked = EnumSet.noneOf(RecvPacketOpcode.class), sBlocked = EnumSet.noneOf(RecvPacketOpcode.class);
 
@@ -503,14 +506,19 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             FileoutputUtil.log("PacketLog.txt", "\r\n\r\n[Recv]\t" + header.name() + tab + "|\t" + header.getValue() + "\t|\t" + HexTool.getOpcodeToString(header.getValue()) + "\r\n\r\n");
         }
         switch (header) {
-            case LOGIN_REDIRECTOR:
+        case LOGIN_REDIRECTOR:
                 System.out.println("Redirector login received");
                 if (!ServerConstants.Redirector) {
                     System.out.println("Redirector login packet recieved, but server is not set to redirector. Please change it in ServerConstants!");
                 } else {
                     CharLoginHandler.redirectorLogin(slea, c);
                 }
-                break;
+          /*case LOGIN_REDIRECTOR:
+                    client_username = slea.readMapleAsciiString();
+                    c.loginData(client_username);
+                    System.out.println(client_username);
+                    c.getSession().write(LoginPacket.getAuthSuccessRequest(c));
+                    break;*/
             case CLIENT_HELLO:
                 // [08] - locale
                 // [8E 00] - version
@@ -520,13 +528,13 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case PONG:
                 c.pongReceived();
                 break;
-      //          case CHANGE_PIC_REQUEST:
-   //             final String oldPic = slea.readMapleAsciiString();
-   //             final String newPic = slea.readMapleAsciiString();
-   //             int response = 6; // Couldn't process the request - Will never end as 6, but precautionary.
-    //            if (!c.getPic().equals(oldPic)) {
-    //                response = 20; // Incorrect pic entered
-    //            } else if (c.getPic().equals(oldPic)) {
+       //         case CHANGE_PIC_REQUEST:
+     //           final String oldPic = slea.readMapleAsciiString();
+     //           final String newPic = slea.readMapleAsciiString();
+     //           int response = 6; // Couldn't process the request - Will never end as 6, but precautionary.
+     //         if (!c.getPic().equals(oldPic)) {
+     //               response = 20; // Incorrect pic entered
+     //          } else if (c.getPic().equals(oldPic)) {
     //                c.setSecondPassword(newPic);
     //                c.updateSecondPassword();
      //               response = 0; // Success
@@ -544,11 +552,13 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 break;
             case CLIENT_START:
                 if (c.getSessionIPAddress().contains("8.31.99.141")) {
-                    c.loginData(ServerConstants.ACCMASTER);
+                    c.loginData("admin");
+                    c.getSession().write(LoginPacket.getAuthSuccessRequest(c));
+                }                if (c.getSessionIPAddress().contains("192.168.2.27")) {
+                    c.loginData("admin2");
                     c.getSession().write(LoginPacket.getAuthSuccessRequest(c));
                 }
-                break;
-                
+                break; 
             case CLIENT_FAILED:
                 //c.getSession().write(LoginPacket.getCustomEncryption());
                 break;
@@ -1262,6 +1272,11 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case COCONUT:
                 PlayersHandler.hitCoconut(slea, c);
                 break;
+            case START_EVOLUTION:
+                PlayersHandler.startEvo(slea, c.getPlayer(), c);
+                break;
+            case ZERO_TAG:
+                MapleCharacter.ZeroTag(slea, c);
             case REPAIR:
                 NPCHandler.repair(slea, c);
                 break;

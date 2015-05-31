@@ -62,6 +62,7 @@ public class SkillFactory {
                                     sse.type = (byte) MapleDataTool.getInt("type", summon_data, 0);
                                     sse.mobCount = (byte) (skillid == 33101008 ? 3 : MapleDataTool.getInt("mobCount", summon_data, 1));
                                     sse.attackCount = (byte) MapleDataTool.getInt("attackCount", summon_data, 1);
+                                    sse.targetPlus = (byte) MapleDataTool.getInt("targetPlus", summon_data, 1);
                                     if (summon_data.getChildByPath("range/lt") != null) {
                                         final MapleData ltd = summon_data.getChildByPath("range/lt");
                                         sse.lt = (Point) ltd.getData();

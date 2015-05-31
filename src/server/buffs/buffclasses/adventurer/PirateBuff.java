@@ -53,6 +53,7 @@ public class PirateBuff extends AbstractBuffClass {
             5711011, //Roll of the Dice
             5721009, //Relentless
             5721054, //Bionic Maximizer
+            5721052,
             
             
         };
@@ -134,7 +135,13 @@ public class PirateBuff extends AbstractBuffClass {
                 //TODO
                 break;
             case 5721054: //Bionic Maximizer
-                //TODO
+                eff.statups.put(MapleBuffStat.HP_R, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(MapleBuffStat.STATUS_RESIST_TWO, eff.info.get(MapleStatInfo.v));
+                eff.statups.put(MapleBuffStat.ELEMENT_RESIST_TWO, eff.info.get(MapleStatInfo.w));
+                eff.statups.put(MapleBuffStat.DAMAGE_RESIST, eff.info.get(MapleStatInfo.y));
+                break;
+            case 5721052:
+                eff.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, eff.info.get(MapleStatInfo.x));
                 break;
             case 5121000: //Maple Warrior
             case 5221000: //Maple Warrior

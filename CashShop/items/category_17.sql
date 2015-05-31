@@ -1,0 +1,3 @@
+/* Dumping data for table `cashshop_items` */
+INSERT INTO cashshop_items (`category`, `subcategory`, `parent`, `image`, `sn`, `itemId`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES ('1000000', '1050200', '1050200', '', '50200318', '5211046', '4', '9000', '9000', '1', '1', '2', '558');
+INSERT INTO cashshop_items (`category`, `subcategory`, `parent`, `image`, `sn`, `itemId`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) VALUES ('1000000', '1050200', '1050200', '', '50200319', '5211048', '4', '2000', '2000', '1', '1', '2', '2000');

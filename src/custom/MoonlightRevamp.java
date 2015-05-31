@@ -16,7 +16,7 @@ public class MoonlightRevamp {
     //public static final byte BossPDRateMultipy = 2; //2x weapon def
     //public static final byte MDRateAddition = 50; // +50% magic def
     //public static final byte BossMDRateMultipy = 2; //2x magic def
-    public static final int monsterSpawn = 2; //2 monsters in one spawn point instead of one
+    public static final int monsterSpawn = 1; //2 monsters in one spawn point instead of one
 
     public static byte getPDRateAddition(final byte current) {
         return current <= 10 ? 20 : current <= 30 ? 50 : current;

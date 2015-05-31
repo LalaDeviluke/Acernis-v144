@@ -10,6 +10,6 @@ package constants;
  */
 public class EventConstants {
 
-    public static boolean DoubleMiracleTime = false;
+    public static boolean DoubleMiracleTime = true;
     public static boolean DoubleTime = false;
 }

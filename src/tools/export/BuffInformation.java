@@ -263,7 +263,7 @@ public class BuffInformation {
         "weather", "disableNextLevelInfo", "?????", "CharLevel", "req",
         "effect1", "effect2", "addAttack", "skillType", "weapon", "weapon2",
         "effect_1H", "state", "finish", "standBuffOn", "combatOrders",
-        "specialActionFrame", "hyper", "reqLev", "psdSkill", "prepare",
+        "specialActionFrame", "hyper", "reqLev", "psdSkill", "targetPlus", "prepare",
         "prepare_1H", "keydown", "keydown_1H", "gaugemax", "gaugemax_1H",
         "attected", "afterimage", "special0", "effect3", "info2", "keydownend",
         "prepare0", "keydown0", "damage", "effectR", "pvpCommon", "number",

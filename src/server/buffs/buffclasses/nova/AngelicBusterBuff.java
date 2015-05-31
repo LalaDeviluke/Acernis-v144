@@ -38,6 +38,7 @@ public class AngelicBusterBuff extends AbstractBuffClass {
     @Override
     public void handleBuff(MapleStatEffect eff, int skill) {
         switch (skill) {
+            case 80001155:
             case 60011219: // Terms and Conditions
                 eff.statups.put(MapleBuffStat.DAMAGE_PERCENT, eff.info.get(MapleStatInfo.indieDamR));
                 break;

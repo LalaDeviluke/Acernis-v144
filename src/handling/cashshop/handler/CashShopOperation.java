@@ -302,6 +302,7 @@ public class CashShopOperation {
                     chr.modifyCSPoints(toCharge, -6000, false);
                     chr.getInventory(type).addSlot((byte) 8);
                     chr.dropMessage(1, "Slots has been increased to " + chr.getInventory(type).getSlotLimit());
+                    c.getSession().write(CField.getCharInfo(chr));
                 } else {
                     c.getSession().write(CSPacket.sendCSFail(0xA4));
                 }
@@ -311,6 +312,7 @@ public class CashShopOperation {
                     chr.modifyCSPoints(toCharge, -4000, false);
                     chr.getInventory(type).addSlot((byte) 4);
                     chr.dropMessage(1, "Slots has been increased to " + chr.getInventory(type).getSlotLimit());
+                    c.getSession().write(CField.getCharInfo(chr));
                 } else {
                     c.getSession().write(CSPacket.sendCSFail(0xA4));
                 }
@@ -338,6 +340,7 @@ public class CashShopOperation {
                     chr.modifyCSPoints(toCharge, -6000, false);
                     chr.getInventory(type).addSlot((byte) 8);
                     chr.dropMessage(1, "Slots has been increased to " + chr.getInventory(type).getSlotLimit());
+                    c.getSession().write(CField.getCharInfo(chr));
                 } else {
                     c.getSession().write(CSPacket.sendCSFail(0xA4));
                 }
@@ -347,6 +350,7 @@ public class CashShopOperation {
                     chr.modifyCSPoints(toCharge, -4000, false);
                     chr.getInventory(type).addSlot((byte) 4);
                     chr.dropMessage(1, "Slots has been increased to " + chr.getInventory(type).getSlotLimit());
+                    c.getSession().write(CField.getCharInfo(chr));
                 } else {
                     c.getSession().write(CSPacket.sendCSFail(0xA4));
                 }
@@ -361,6 +365,7 @@ public class CashShopOperation {
                 chr.getStorage().increaseSlots((byte) (4 * coupon));
                 chr.getStorage().saveToDB();
                 chr.dropMessage(1, "Storage slots increased to: " + chr.getStorage().getSlots());
+                c.getSession().write(CField.getCharInfo(chr));
             } else {
                 c.getSession().write(CSPacket.sendCSFail(0xA4));
             }
@@ -439,14 +444,15 @@ public class CashShopOperation {
                 c.getSession().write(CSPacket.sendCSFail(0xB1));
             }
         } else if ((action == 33) || (action == 39)) {
+          //  slea.skip(5);
             slea.readMapleAsciiString();
             int toCharge = slea.readInt();
             CashItemInfo item = CashItemFactory.getInstance().getItem(slea.readInt());
-            int amount = slea.readInt();
+     //       slea.skip(1);
             String partnerName = slea.readMapleAsciiString();
             String msg = slea.readMapleAsciiString();
             if ((item == null) || (!GameConstants.isEffectRing(item.getId())) || (c.getPlayer().getCSPoints(toCharge) < item.getPrice()) || (msg.length() > 73) || (msg.length() < 1)) {
-                // c.getSession().write(MTSCSPacket.sendCSFail(0));
+                 c.getSession().write(CSPacket.sendCSFail(0));
                 doCSPackets(c);
                 return;
             }
@@ -485,7 +491,7 @@ public class CashShopOperation {
                 doCSPackets(c);
                 return;
             }
-            c.getPlayer().modifyCSPoints(toCharge, -amount, false);
+         //   c.getPlayer().modifyCSPoints(toCharge, -amount, false);
             c.getPlayer().dropMessage(1, "Purchase successful.");
             /*   Item itemz = chr.getCashInventory().toItem(item);
              if ((itemz != null) && (itemz.getUniqueId() > 0) && (itemz.getItemId() == item.getId()) && (itemz.getQuantity() == item.getCount())) {
@@ -647,8 +653,8 @@ public class CashShopOperation {
         c.getSession().write(CWvsContext.BuddylistPacket.updateBuddylist(c.getPlayer().getBuddylist().getBuddies()));
         c.getSession().write(CSPacket.showNXMapleTokens(c.getPlayer()));
 //        c.getSession().write(CSPacket.sendWishList(c.getPlayer(), false));
-//        c.getSession().write(CSPacket.showNXMapleTokens(c.getPlayer()));
-//        c.getSession().write(CSPacket.enableCSUse());
-//         c.getPlayer().getCashInventory().checkExpire(c);
+        c.getSession().write(CSPacket.showNXMapleTokens(c.getPlayer()));
+        c.getSession().write(CSPacket.enableCSUse());
+         c.getPlayer().getCashInventory().checkExpire(c);
     }
 }

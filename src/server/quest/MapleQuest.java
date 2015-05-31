@@ -20,6 +20,7 @@ import scripting.NPCScriptManager;
 import server.farm.MapleFarmQuestRequirement;
 import tools.Pair;
 import tools.StringUtil;
+import tools.packet.CField;
 import tools.packet.CField.EffectPacket;
 
 public class MapleQuest implements Serializable {
@@ -376,6 +377,20 @@ public class MapleQuest implements Serializable {
 
     public boolean isBlocked() {
         return blocked;
+    }
+
+     public void socomplete(MapleCharacter c, int npc) {
+        for (MapleQuestAction a : this.completeActs) {
+            if (!a.checkEnd(c, null)) {
+                return;
+            }
+        }
+        forceComplete(c, npc);
+        for (MapleQuestAction a : this.completeActs) {
+            a.runEnd(c, null);
+        }
+        c.getClient().getSession().write(CField.EffectPacket.showForeignEffect(12));
+        c.getMap().broadcastMessage(c, CField.EffectPacket.showForeignEffect(c.getId(), 12), false);
     }
 
     public static enum MedalQuest {

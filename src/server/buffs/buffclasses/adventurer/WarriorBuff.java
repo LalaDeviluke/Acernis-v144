@@ -59,6 +59,7 @@ public class WarriorBuff extends AbstractBuffClass {
             1221054, //Sacrosanctity
             1321053, //Epic Adventure
             1321054, //Dark Thrist
+        //    1301013,
         };
     }
     
@@ -121,7 +122,7 @@ public class WarriorBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.MAXMP, eff.info.get(MapleStatInfo.y));
                 break;
             case 1301013: //Evil Eye
-                eff.statups.put(MapleBuffStat.BEHOLDER, eff.info.get(MapleStatInfo.x));
+               eff.statups.put(MapleBuffStat.BEHOLDER, 1);
                 break;
             case 1311015: //Cross Surge
                 eff.statups.put(MapleBuffStat.CROSS_SURGE, eff.info.get(MapleStatInfo.x));
@@ -138,7 +139,7 @@ public class WarriorBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, eff.info.get(MapleStatInfo.indieMaxDamageOver));
                 break;
             default:
-               // System.out.println("Warrior skill not coded: " + skill);
+                //System.out.println("Warrior skill not coded: " + skill);
                 break;
         }
     }

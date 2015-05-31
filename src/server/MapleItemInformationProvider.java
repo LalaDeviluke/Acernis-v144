@@ -708,7 +708,7 @@ public class MapleItemInformationProvider {
     }
 
     public final StructSetItem getSetItem(final int setItemId) {
-        return setItems.get((byte) setItemId);
+        return setItems.get(setItemId);
     }
 
     public final List<Integer> getScrollReqs(final int itemId) {
@@ -1409,6 +1409,9 @@ public class MapleItemInformationProvider {
         }
         return getItemInformation(itemId) != null;
     }
+    
+    
+    
 
     public final boolean isCash(final int itemId) {
         if (getEquipStats(itemId) == null) {

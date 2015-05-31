@@ -46,7 +46,7 @@ public class ChangeableStats extends OverrideMonsterStats {
         final double hpRatio = (double) stats.getHp() / (double) stats.getExp();
         final double pqMod = (pqMob ? 1.5 : 1.0); // god damn
         hp = (long) Math.round((!stats.isBoss() ? GameConstants.getMonsterHP(newLevel) : (stats.getHp() * mod)) * pqMod); // right here lol
-        exp = (int) Math.round((!stats.isBoss() ? (GameConstants.getMonsterHP(newLevel) / hpRatio) : (stats.getExp())) * pqMod);
+        exp = (int) Math.round((!stats.isBoss() ? (GameConstants.getMonsterHP(newLevel) / hpRatio) : (stats.getExp())));
         mp = (int) Math.round(stats.getMp() * mod * pqMod);
         watk = (int) Math.round(stats.getPhysicalAttack() * mod);
         matk = (int) Math.round(stats.getMagicAttack() * mod);
@@ -56,6 +56,7 @@ public class ChangeableStats extends OverrideMonsterStats {
         MDRate = Math.min(stats.isBoss() ? 30 : 20, (int) Math.round(stats.getMDRate() * mod));
         pushed = (int) Math.round(stats.getPushed() * mod);
         speed = (int) Math.round(stats.getSpeed() * mod);
-        level = newLevel;
+        level = 150;
+      //  exp = exp * level;
     }
 }

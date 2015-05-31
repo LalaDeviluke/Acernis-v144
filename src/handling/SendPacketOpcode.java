@@ -89,12 +89,12 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     PIGMI_REWARD((short) 0x6E),//6C
     OWL_OF_MINERVA((short) 0x6F),//6D
     OWL_RESULT((short) 0x70),//6E
-    ENGAGE_REQUEST((short) 0x71),//6F
-    ENGAGE_RESULT((short) 0x72),//70
-    WEDDING_GIFT((short) 0x73),//71
-    WEDDING_MAP_TRANSFER((short) 0x74),//72
+    ENGAGE_REQUEST((short) 0x72),//6F
+    ENGAGE_RESULT((short) 0x73),//70
+    WEDDING_GIFT((short) 0x74),//71
+    WEDDING_MAP_TRANSFER((short) 0x75),//72
     USE_CASH_PET_FOOD((short) 0x76),//74
-    YELLOW_CHAT((short) 0x78),//75
+    YELLOW_CHAT((short) 0x77),//75
     SHOP_DISCOUNT((short) 0x79),//76
     CATCH_MOB((short) 0x7A),//77
     MAKE_PLAYER_NPC((short) 0x7B),//78
@@ -123,8 +123,9 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     FAMILY_INVITE((short) 0x999),
     FAMILY_JUNIOR((short) 0x93),//90
     SENIOR_MESSAGE((short) 0x94),//91
-    FAMILY((short) 0x97),//94
-    REP_INCREASE((short) 0x98),//95
+    FAMILY((short) 0x95),//94
+    REP_INCREASE((short) 0x96),//95
+    EVOLVING_ACTION((short) 0x98),
     FAMILY_LOGGEDIN((short) 0x99),//96
     FAMILY_BUFF((short) 0x9A),//97
     FAMILY_USE_REQUEST((short) 0x9B),//98
@@ -169,9 +170,9 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     MULUNG_MESSAGE((short) 0xC9),//C2
     GIVE_CHARACTER_SKILL((short) 0xCA),//C3
     MULUNG_DOJO_RANKING((short) 0xCF),//C8
-    UPDATE_INNER_ABILITY((short) 0xD4),//CD
-    EQUIP_STOLEN_SKILL((short) 0xD5),//CE
-    REPLACE_SKILLS((short) 0xD5),//CE
+    UPDATE_INNER_ABILITY((short) 0x999),//CD
+    EQUIP_STOLEN_SKILL((short) 0xD3),//CE
+    REPLACE_SKILLS((short) 0xD3),//CE
     INNER_ABILITY_MSG((short) 0xD6),//CF
     ENABLE_INNER_ABILITY((short) 0xD7),//D0
     DISABLE_INNER_ABILITY((short) 0xD8),//D1
@@ -204,7 +205,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     SERVER_BLOCKED((short) 0x12E),//115
     PARTY_BLOCKED((short) 0x12F),//116
     SHOW_EQUIP_EFFECT((short) 0x130),//117
-    MULTICHAT((short) 0x134),//118
+    MULTICHAT((short) 0x133),//118
     WHISPER((short) 0x135),//119
     SPOUSE_CHAT((short) 0x137),//11B
     BOSS_ENV((short) 0x138),//11C
@@ -223,11 +224,13 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     PYRAMID_UPDATE((short) 0x14E),//131
     PYRAMID_RESULT((short) 0x14F),//132
     QUICK_SLOT((short) 0x151),//134
-    MOVE_PLATFORM((short) 0x153),//135
-    PYRAMID_KILL_COUNT((short) 0x155),//137,
-    PVP_INFO((short) 0x154),//136
-    DIRECTION_STATUS((short) 0x157),//139
-    GAIN_FORCE((short) 0x158),//13A
+    MOVE_PLATFORM((short) 0x152),//135
+    PYRAMID_KILL_COUNT((short) 0x153),//137,
+    PVP_INFO((short) 0x156),//136
+    DIRECTION_STATUS((short) 0x157),//139 //Also trusting 155 on this
+    GAIN_FORCE((short) 0x158),//13A //165 DC's what could it be for .-. //163 Different IP
+    INTRUSION((short) 0x162),
+    DIFFERENT_IP((short) 0x163),
     ACHIEVEMENT_RATIO((short) 0x159),//13B
     QUICK_MOVE((short) 0x15A),//13C
     SPAWN_PLAYER((short) 0x165),//144
@@ -246,7 +249,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     PVP_ATTACK((short) 0x140),
     PVP_MIST((short) 0x141),
     PVP_COOL((short) 0x142),
-    TESLA_TRIANGLE((short) 0x17C),//0x15C //17D
+    TESLA_TRIANGLE((short) 0x17E),
     FOLLOW_EFFECT((short) 0x15D),
     SHOW_PQ_REWARD((short) 0x15E),
     CRAFT_EFFECT((short) 0x182),//15F
@@ -266,7 +269,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     PET_SIZE((short) 0x198),//173
     PET_COMMAND((short) 0x199),//174
     DRAGON_SPAWN((short) 0x19A),//175
-    INNER_ABILITY_RESET_MSG((short) 0x999),//173
+    INNER_ABILITY_RESET_MSG((short) 0x173),//173
     DRAGON_MOVE((short) 0x19B),//176
     DRAGON_REMOVE((short) 0x19C),//177
     ANDROID_SPAWN((short) 0x19D),//178
@@ -357,7 +360,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     SHOW_MAP_NAME((short) 0x999),
     OPEN_BAG((short) 0x21D),//18B
     DRAGON_BLINK((short) 0x21E),//18C
-    PVP_ICEGAGE((short) 0x21F),//18D
+    PVP_ICEGAGE((short) 0x220),//18D
     DIRECTION_INFO((short) 0x220),//18E
     REISSUE_MEDAL((short) 0x221),//18F
     PLAY_MOVIE((short) 0x224),//1FD
@@ -388,7 +391,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     DAMAGE_MONSTER((short) 0x27C),//248
     SKILL_EFFECT_MOB((short) 0x27D),//249
     TELE_MONSTER((short) 0x999), //todo sniff
-    MONSTER_SKILL((short) 0x999), //todo sniff
+    MONSTER_SKILL((short) 0x27E), //todo sniff
     MONSTER_CRC_CHANGE((short) 0x27F),//24B
     SHOW_MONSTER_HP((short) 0x280),//24C
     SHOW_MAGNET((short) 0x281),//24D
@@ -547,7 +550,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     FARM_MONSTER_INFO((short) 0x369),
     FARM_QUEST_DATA((short) 0x36A),
     FARM_QUEST_INFO((short) 0x36B),
-    FARM_MESSAGE((short) 0x999),//36C
+    FARM_MESSAGE((short) 0x36C),//36C
     UPDATE_MONSTER((short) 0x36D),
     AESTHETIC_POINT((short) 0x36E),
     UPDATE_WARU((short) 0x36F),

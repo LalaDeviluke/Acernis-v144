@@ -106,6 +106,8 @@ public class ThiefBuff extends AbstractBuffClass {
             case 4121054: //Bleed Dart
                 break;
             case 4341054: // Blade Clone
+                eff.statups.put(MapleBuffStat.DARK_CRESCENDO, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(MapleBuffStat.ARIANT_COSS_IMU2, Integer.valueOf(1));
                 break;
             case 4121053: //Epic Adventure
             case 4221053: //Epic Adventure

@@ -198,6 +198,13 @@ public class PlayerCommand {
             stat = MapleStat.MAXMP;
         }
     }
+    
+        public static class Hair extends DistributeStatCommands {
+
+        public Hair() {
+            stat = MapleStat.HAIR;
+        }
+    }
 
     public abstract static class DistributeStatCommands extends CommandExecute {
 
@@ -224,7 +231,8 @@ public class PlayerCommand {
                     player.updateSingleStat(MapleStat.LUK, player.getStat().getLuk());
                     break;
                 case MAXHP:
-                    long maxhp = Math.min(500000, Math.abs(current + amount));
+                    long maxhp = Math.min(500000, Math.abs(current + amount * 30));
+              //      player.getStat().setMaxHp((short) (current + amount * 30), player);
                     player.getStat().setMaxHp((short) maxhp, player);
                     player.updateSingleStat(MapleStat.HP, player.getStat().getHp());
                     break;
@@ -232,6 +240,11 @@ public class PlayerCommand {
                     long maxmp = Math.min(500000, Math.abs(current + amount));
                     player.getStat().setMaxMp((short) maxmp, player);
                     player.updateSingleStat(MapleStat.MP, player.getStat().getMp());
+                    break;     
+                case HAIR:
+                    int hair = amount;
+                    player.setSecondHair(hair);
+                    player.updateSingleStat(MapleStat.HAIR, player.getSecondHair());
                     break;
             }
         }
@@ -270,11 +283,11 @@ public class PlayerCommand {
             }
             int hpUsed = 0;
             int mpUsed = 0;
-            if (stat == MapleStat.MAXHP) {
-                hpUsed = change;
-                short job = c.getPlayer().getJob();
-                change *= GameConstants.getHpApByJob(job);
-            }
+         //   if (stat == MapleStat.MAXHP) {
+        //        hpUsed = change;
+         //       short job = c.getPlayer().getJob();
+         //       change *= GameConstants.getHpApByJob(job);
+         //   }
             if (stat == MapleStat.MAXMP) {
                 mpUsed = change;
                 short job = c.getPlayer().getJob();
@@ -283,7 +296,8 @@ public class PlayerCommand {
                     return 0;
                 }
                 change *= GameConstants.getMpApByJob(job);
-            }
+            }         
+
             if (change <= 0) {
                 c.getPlayer().dropMessage(5, "You don't have enough AP Resets that.");
                 return 0;
@@ -305,11 +319,15 @@ public class PlayerCommand {
             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + hpUsed));
             c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + mpUsed));
             c.getPlayer().updateSingleStat(MapleStat.AVAILABLEAP, c.getPlayer().getRemainingAp());
+                       if (stat == MapleStat.MAXHP) {
+                           c.getPlayer().dropMessage(5, StringUtil.makeEnumHumanReadable(stat.name()) + " has been raised by " + change * 30 + ".");
+                           c.getPlayer().fakeRelog();
+           } else
             c.getPlayer().dropMessage(5, StringUtil.makeEnumHumanReadable(stat.name()) + " has been raised by " + change + ".");
             return 1;
         }
     }
-/*
+
     public static class Mob extends CommandExecute {
 
         @Override
@@ -327,7 +345,7 @@ public class PlayerCommand {
             }
             return 1;
         }
-    }*/
+    }
 
     /*public abstract static class OpenNPCCommand extends CommandExecute {
 
@@ -700,7 +718,7 @@ public class PlayerCommand {
         public int execute(MapleClient c, String[] splitted) {
             StringBuilder sb = new StringBuilder();
             sb.append("\r\n@str, @dex, @int, @luk, @hp, @mp <amount to add or subtract>");
-            //sb.append("\r\n@mob < Information on the closest monster >");
+            sb.append("\r\n@mob < Information on the closest monster >");
             sb.append("\r\n@check < Displays various information; also use if you are stuck or unable to talk to NPC >");
             //sb.append("\r\n@npc < Universal NPC >");
             sb.append("\r\n@callgm < Send a message to all online GameMasters.");

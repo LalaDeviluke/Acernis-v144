@@ -69,13 +69,13 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     private MapleMonsterStats stats;
     private ChangeableStats ostats = null;
     private long hp, nextKill = 0, lastDropTime = 0;
-    private int mp;
+    private int mp, exp;
     private byte carnivalTeam = -1;
     private MapleMap map;
     private WeakReference<MapleMonster> sponge = new WeakReference<>(null);
     private int linkoid = 0, lastNode = -1, highestDamageChar = 0, linkCID = 0; // Just a reference for monster EXP distribution after dead
     private WeakReference<MapleCharacter> controller = new WeakReference<>(null);
-    private boolean fake = false, dropsDisabled = false, controllerHasAggro = false;
+    private boolean fake = false, dropsDisabled = false, controllerHasAggro = false, statChanged;
     private final Collection<AttackerEntry> attackers = new LinkedList<>();
     private EventInstanceManager eventInstance;
     private MonsterListener listener = null;
@@ -212,6 +212,16 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         this.ostats = new ChangeableStats(stats, newLevel, pqMob);
         this.hp = ostats.getHp();
         this.mp = ostats.getMp();
+    }
+    
+        public final void changeMob(final int newLevel, boolean pqMob) {
+        if (!stats.isChangeable()) {
+            return;
+        }
+        this.ostats = new ChangeableStats(stats, newLevel, pqMob);
+        this.hp = ostats.getHp() * 100000;
+        this.mp = ostats.getMp();
+        this.exp = ostats.getExp() * newLevel * 100;
     }
 
     public final MapleMonster getSponge() {
@@ -760,6 +770,38 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
 
+    
+        public final void changeableMob(MapleCharacter chr) {
+        if (getStats().isChangeableMob()) {
+            double rate = chr.getLevel() / (double) getStats().getLevel();
+            if (chr.getLevel() >= 150) {
+                rate = rate * rate;
+            }
+            getStats().setHp((int) (getStats().getHp() * rate));
+            setHp((int) (getHp() * 10 * rate));
+            getStats().setMp((int) (getStats().getMp() * rate));
+            setMp((int) (getMp() * rate));
+            getStats().setPad((int) (getStats().getPad() * rate));
+            getStats().setMad((int) (getStats().getMad() * rate));
+            getStats().setPhysicalDefense((short) (getStats().getPhysicalDefense() * rate));
+            getStats().setMagicDefense((short) (getStats().getMagicDefense() * rate));
+            getStats().setAcc((int) (getStats().getAcc() * rate));
+            getStats().setEva((short) (getStats().getEva() + chr.getLevel() / 2));
+            getStats().setPushed((int) (getStats().getPushed() * rate));
+            getStats().setLevel(chr.getLevel());
+            getStats().setExp(chr.getLevel() * 1000);
+            setStatChanged(true);
+        }
+    }
+        
+            public final void setStatChanged(boolean d) {
+        this.statChanged = d;
+    }
+
+    public final boolean isStatChanged() {
+        return statChanged;
+    }
+        
     @Override
     public final void sendSpawnData(final MapleClient client) {
         if (!isAlive()) {

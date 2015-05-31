@@ -739,7 +739,11 @@ public final class MapleMap {
         } else if (mobid == 9400289 && mapid == 802000821) {
             doShrine(true);
             //INSERT HERE: 2095_tokyo
-        } else if (mobid == 8830000 && mapid == 105100300) {
+        } else if (mobid == 8920100 && mapid == 105200310) {
+            final MapleReactor my = new MapleReactor(MapleReactorFactory.getReactor(1052006), 1052006);
+            my.setState((byte) 1);
+            spawnReactorOnGroundBelow(my, new java.awt.Point(56, 135));   
+        }else if (mobid == 8830000 && mapid == 105100300) {
             if (speedRunStart > 0) {
                 type = ExpeditionType.Balrog;
             }
@@ -2395,6 +2399,25 @@ public final class MapleMap {
                 }
             }
         }
+        
+        if (this.mapid == 103050900) {
+            try {
+                chr.getClient().getSession().write(CField.UIPacket.IntroEnableUI(1));
+                chr.getClient().getSession().write(CField.UIPacket.getDirectionInfo(1, 8000));
+                chr.getClient().getSession().write(CField.UIPacket.getDirectionInfo(1, 8000));
+                chr.getClient().getSession().write(CField.UIPacket.getDirectionInfo(3, 2));
+                chr.dropMessage(-1, "On A Rainy Day");
+                chr.dropMessage(-1, "The Secret Garden Depths");
+                chr.getClient().removeClickedNPC();
+                Thread.sleep(11000L);
+            } catch (InterruptedException e) {
+            }
+            chr.getClient().getSession().write(CField.UIPacket.getDirectionStatus(false));
+            chr.getClient().getSession().write(CField.UIPacket.IntroEnableUI(0));
+            chr.getClient().removeClickedNPC();
+            chr.dropMessage(-1, "Click on ryden to get your first quest");
+        }
+        
         if (permanentWeather > 0) {
             chr.getClient().getSession().write(CField.startMapEffect("", permanentWeather, false)); //snow, no msg
         }

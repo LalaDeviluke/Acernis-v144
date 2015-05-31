@@ -24,14 +24,14 @@ public class JobPacket {
     
     public static class WindArcherPacket{
     	public static byte[] giveWindArcherBuff(int buffid, int bufflength, Map<MapleBuffStat, Integer> statups, MapleStatEffect effect, MapleCharacter chr) {
-  		  MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-  	      mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
-  	      PacketHelper.writeBuffMask(mplew, statups);
-  	      try{
-  		      byte count=0;
-  		      StringBuilder statValue= new StringBuilder();
-  		        Map.Entry[] stat= new Map.Entry[statups.size()];
-  		        for (Map.Entry temp : statups.entrySet()) {
+            MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+  	    mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
+  	    PacketHelper.writeBuffMask(mplew, statups);
+  	    try{
+                byte count=0;
+                StringBuilder statValue= new StringBuilder();
+                Map.Entry[] stat= new Map.Entry[statups.size()];
+  	        for (Map.Entry temp : statups.entrySet()) {
   		        	stat[count]= temp;
   		        	statValue.append((int)stat[count].getValue()).append(" - ");
   		        	count++;
@@ -496,7 +496,7 @@ public class JobPacket {
 
             mplew.writeShort(1);
             mplew.writeInt(skill); //20040217
-            mplew.writeInt(200000000);
+            mplew.writeInt(duration);
             mplew.writeZeroBytes(5);
             mplew.writeInt(skill); //20040217
             mplew.writeInt(483195070);

@@ -56,8 +56,8 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     ENTER_AZWAN(true, (short) 0x4D),
     ENTER_AZWAN_EVENT(true, (short) 0x4A),
     LEAVE_AZWAN(true, (short) 0x4B),
-    ENTER_PVP(true, (short) 0x50),
-    ENTER_PVP_PARTY(true, (short) 0x50),
+    ENTER_PVP(true, (short) 0x55),
+    ENTER_PVP_PARTY(true, (short) 0x59),
     LEAVE_PVP(true, (short) 0x999),
     MOVE_PLAYER(true, (short) 0x5E),
     CANCEL_CHAIR(true, (short) 0x60),
@@ -169,10 +169,11 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     CURE_POT(true, (short) 0xD9),
     REWARD_POT(true, (short) 0xDA),
     AZWAN_REVIVE(true, (short) 0xDB),
-    USE_COSMETIC(true, (short) 0x999),
-    INNER_CIRCULATOR(true, (short) 0xDF),
-    PVP_RESPAWN(true, (short) 0xE0),
-    GAIN_FORCE(true, (short) 0xE1),
+    ZERO_TAG(true, (short) 0x123),
+    USE_COSMETIC(true, (short) 0x124),
+    INNER_CIRCULATOR(true, (short) 0x121),
+    PVP_RESPAWN(true, (short) 0xCF),
+    GAIN_FORCE(true, (short) 0xE0),
     ADMIN_CHAT(true, (short) 0x126),//119
     PARTYCHAT(true, (short) 0x127),//120
     COMMAND(true, (short) 0x129),//121
@@ -246,16 +247,16 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     SUB_SUMMON(true, (short) 0x1CB),//1BB
     REMOVE_SUMMON(true, (short) 0x1CC),//1BC
     PVP_SUMMON(true, (short) 0x1CE),//1BE
-    MOVE_DRAGON(true, (short) 0x1CF),//1C0
+    MOVE_DRAGON(true, (short) 0x1D0),//1C0
     USE_ITEM_QUEST(true, (short) 0x1D2),//1C4
-    MOVE_ANDROID(true, (short) 0x1D3),//1C5
+    MOVE_ANDROID(true, (short) 0x1D4),//1C5
     UPDATE_QUEST(true, (short) 0x1D5),//1C7//+16
     QUEST_ITEM(true, (short) 0x1D6),//1C8
     MOVE_FAMILIAR(true, (short) 0x1DC),//1CC
     TOUCH_FAMILIAR(true, (short) 0x1DD),//1CD
     ATTACK_FAMILIAR(true, (short) 0x1DE),//1CE
     REVEAL_FAMILIAR(true, (short) 0x1DF),//1CF
-    QUICK_SLOT(true, (short) 0x1D0),
+    QUICK_SLOT(true, (short) 0x1D7),
     PAM_SONG(true, (short) 0x1D8),
     MOVE_LIFE(true, (short) 0x208),//1EC
     AUTO_AGGRO(true, (short) 0x1EE),
@@ -276,13 +277,14 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     SNOWBALL(true, (short) 0x182),
     LEFT_KNOCK_BACK(true, (short) 0x183),
     CANDY_RANKING(true, (short) 0x185),//
-    COCONUT(true, (short) 0x186),
+    START_EVOLUTION(true, (short) 0x186),
+    COCONUT(true, (short) 0x999),
     SHIP_OBJECT(true, (short) 0x999),
     PARTY_SEARCH_START(true, (short) 0x197),
     PARTY_SEARCH_STOP(true, (short) 0x198),
     START_HARVEST(true, (short) 0x24E),//22F
     STOP_HARVEST(true, (short) 0x24F),//230
-    QUICK_MOVE(true, (short) 0x19E),
+    QUICK_MOVE(true, (short) 0x251),
     CS_UPDATE(true, (short) 0x28A),//257
     BUY_CS_ITEM(true, (short) 0x28B),//258
     COUPON_CODE(true, (short) 0x28C),//259
@@ -297,7 +299,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     NURTURE_MONSTER(false, (short) 0x295),
     EXIT_FARM(false, (short) 0x299),
     FARM_QUEST_CHECK(false, (short) 0x29D),
-    FARM_FIRST_ENTRY(false, (short) 0x2A8),
+    FARM_FIRST_ENTRY(false, (short) 0x2A7),
     GOLDEN_HAMMER(true, (short) 0x2A4),//1BB
     VICIOUS_HAMMER(true, (short) 0x1BD),
     PYRAMID_BUY_ITEM(true, (short) 0x999),
